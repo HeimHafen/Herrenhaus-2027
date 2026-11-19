@@ -1,3 +1,4 @@
+import {addStairNiche} from "./stair-niche.js?v=89";
 import { WEST_CORE } from './stair-layout.js?v=76';
 import { addManorWallFinish, buildGardenHall } from './garden-hall.js?v=87';
 import { WEST_STAIR } from './stair-navigation.js?v=76';
@@ -347,6 +348,7 @@ export function buildEmptyInterior(THREE, scene) {
     {x:wallX,z:wallFront,length:wallWidth,alongX:true,side:-1,top:shoulder}
   ]);
   buildGardenHall(THREE,structure,garden,hallWalls,plaster,gardenSlabs,gardenRooms,wallFront);
+  addStairNiche(THREE,structure,walls[0],{left:wallLeft,right:wallRight,wallFace:wallFront,floor:garden.floor+.046});
 
   const well=wells.find(w=>w.center<0);
   // Inlaid stone extends to the portal and meets the surrounding floor flush.
@@ -682,6 +684,58 @@ export function buildEmptyInterior(THREE, scene) {
         }
         const treadIndex=z=>Math.floor((z-well.start)/runStep);
         const innerA=laneA+widthA/2;
+        if(well===westWell&&stage===0){
+          const end=wallFront+.01;
+          const faceX=innerA+.012;
+          const thickness=.145;
+          const rise=(mid-lo)/STEPS_PER_RUN;
+          const slope=(mid-lo)/(well.turn-startA);
+          const shape=new THREE.Shape();
+          shape.moveTo(startA-.018,lo);
+          shape.lineTo(startA-.018,lo+rise-.025);
+          for(let i=0;i<STEPS_PER_RUN;i++){
+            const next=Math.min(end,startA+(i+1)*stepA);
+            shape.lineTo(next,lo+(i+1)*rise-.025);
+            if(next===end)break;
+            shape.lineTo(next,lo+(i+2)*rise-.025);
+          }
+          shape.lineTo(end,lo);
+          shape.closePath();
+          const closedSide=new THREE.Mesh(new THREE.ExtrudeGeometry(shape,{
+            depth:thickness,bevelEnabled:false
+          }),warmPlaster);
+          closedSide.rotation.y=-Math.PI/2;
+          closedSide.position.x=faceX;
+          closedSide.name='Westtreppe_Geschlossene_Wand_unter_Treppenlauf';
+          closedSide.castShadow=closedSide.receiveShadow=true;
+          structure.add(closedSide);
+          walls[0].push({x:faceX-thickness/2,z:(startA-.018+end)/2,hw:thickness/2,hd:(end-startA+.018)/2});
+          const floor=garden.floor+.046;
+          for(const [height,depth,offset] of [[.089,.035,0],[.022,.048,.051]]){
+            finishBox(railStone,faceX+depth/2,floor+offset+height/2,(startA+end)/2,
+              depth,height,end-startA,-1,false,'Westtreppe_Durchgehender_Sockel');
+          }
+          const topAt=z=>Math.min(floor+.93,lo+(z-startA)*slope-.15);
+          const panelMaterial=new THREE.MeshStandardMaterial({color:0xd2c5b0,roughness:.83});
+          const trimMaterial=new THREE.MeshStandardMaterial({color:0xe1d4bf,roughness:.76});
+          const rail=(a,b,material,r)=>{
+            beam(new THREE.Vector3(faceX+.019,a[1],a[0]),new THREE.Vector3(faceX+.019,b[1],b[0]),r,material,'Westtreppe_Kassettenprofil');
+          };
+          for(let z=startA+.52;z<end-.24;z+=.77){
+            const a=z,b=Math.min(end-.075,z+.69);
+            if(b-a<.16||topAt(a)<floor+.20)continue;
+            const points=[[a,floor+.16],[b,floor+.16],[b,topAt(b)],[a,topAt(a)]];
+            const panel=new THREE.Shape(points.map(([u,v])=>new THREE.Vector2(u,v)));
+            const mesh=new THREE.Mesh(new THREE.ShapeGeometry(panel),panelMaterial);
+            mesh.rotation.y=Math.PI/2;
+            mesh.scale.x=-1;
+            mesh.position.x=faceX+.009;
+            mesh.name='Westtreppe_Angepasste_Wandkassette';
+            mesh.receiveShadow=true;
+            structure.add(mesh);
+            points.forEach((point,i)=>rail(point,points[(i+1)%points.length],trimMaterial,.014));
+          }
+        }
         balustrade(innerA,startA,lo,innerA,well.turn,mid,
           z=>lo+(Math.floor((z-startA)/stepA)+1)*(mid-lo)/STEPS_PER_RUN,well.center<0&&stage===0);
         balustrade(well.laneB-laneWidth/2,well.start,hi,well.laneB-laneWidth/2,well.turn,mid,

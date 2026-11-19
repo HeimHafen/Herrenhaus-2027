@@ -1,4 +1,12 @@
-# Herrenhaus 2027 · V87
+# Herrenhaus 2027 · V89
+
+## V89 · Eingerichtete Treppennische
+
+Eine Walnusskonsole mit roter Schubladenfront und ein mittig aufgehängtes Landschaftsgemälde im Hochformat ergänzen die Nische.
+
+## V88 · Geschlossene Treppenverkleidung
+
+Unter dem ersten Lauf der Haupttreppe schließt eine profilierte Wand die Öffnung bis zur Podestwand. Die Kassetten folgen der Treppenschräge.
 
 ## V87 · Anschluss der Haupttreppe
 
