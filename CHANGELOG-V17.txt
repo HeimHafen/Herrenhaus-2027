@@ -1,0 +1,17 @@
+Herrenhaus 2027 – V17 / historischer Eingangsflur (18.11.2026)
+
+* Einzige V16-Rohbau-Ausnahme: Naturstein-Oktagonfliesen mit dunklen
+  rautenförmigen Einlegern und einer umlaufenden Ornamentbordüre im
+  Erdgeschoss-Eingangsgang DIREKT HINTER der zweiflügeligen Eichenholztür.
+* Fläche: x=-1.46..1.46 m; z=8.020..12.095 m; y=0.941 m.
+* Die Fliesen sind eine separate dünne visuelle Bodenoberfläche. Keine
+  Änderung an tragender Platte, Kollision, Treppen, Türanimation oder Wänden.
+* Alle sonstigen Räume, Geschosse und Außenwege bleiben ohne neue Fliesen,
+  Lampen, Teppiche, Marmorausstattung oder andere Dekorationen.
+* Textur ist eigenständig prozedural erstellt nach Nutzer-Bildreferenz.
+  Das kommerzielle/extern bereitgestellte Sketchfab-Modell wurde NICHT
+  kopiert oder eingebaut. Für exakte Originaloberfläche ist ein lizenziertes
+  GLB/GLTF/OBJ mit Texturen vom Rechteinhaber erforderlich.
+* Neue Datei src/entrance-floor.js, Asset assets/entrance-floor/historische-eingangsfliesen.jpg,
+  zusätzlicher Test test_v17_entrance_floor.py.
+* Vorschau-Start: ?view=entry&build=v17

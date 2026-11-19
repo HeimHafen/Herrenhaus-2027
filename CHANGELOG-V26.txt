@@ -1,0 +1,24 @@
+Herrenhaus 2027 – V26 · ECHTE KORREKTUR DES AKTIVEN V25-STANDS (18.11.2026)
+
+URSACHE:
+V25 lud weiterhin src/castle-door-import.js und dadurch die alte Castle Style Door.
+Die zuvor erstellte Eichentür war zwar vorhanden, wurde aber im aktiven Spiel nicht aufgerufen.
+Zusätzlich lag in der bereitgestellten ZIP ein alter verschachtelter Projektordner.
+
+BEHOBEN:
+- src/main.js importiert und ruft ab sofort src/oak-door.js auf – KEIN Castle-Style-Import mehr.
+- Massive, RECHTECKIGE und ZWEIFLÜGELIGE Eichentür, 17 cm Holzstärke im Modell.
+- Dunkle Eichenmaserung, tiefe Kassetten, lange Bronzezuggriffe, Nieten und Scharnierdetails.
+- Tür an den bestehenden V25-Steinrahmen angepasst (lichte Breite ~2.68 m).
+- Blattmaße ca. 2.638 m Gesamtbreite x 3.320 m Höhe; Schwelle .938 m.
+- Berührungsfreies automatisches Öffnen und bestehende Säulenarchitektur behalten.
+- Animation und Hauptkollision an neue Blattbreiten angepasst.
+- Wiederholte Leisten an beiden Flügeln werden für mobile GPU instanziert.
+- Startseite, Importpfad, Holztextur und sichtbare Versionsanzeige cache-aktualisiert.
+- Unbenutztes Castle-Style-GLB verbleibt nur als Rückfallebene im Original-Asset-Verzeichnis.
+- Keine weiteren Gebäude-Bauteile geändert.
+
+KONTROLLE:
+Der V26-Schriftzug erscheint oben im Spiel. Test der geschlossenen Tür mit ?view=door.
+Ein V25-Schriftzug bedeutet, dass noch die alte index.html ausgeliefert wird.
+Die echte Safari-/GitHub-Pages-Darstellung muss nach dem Upload einmal kontrolliert werden.

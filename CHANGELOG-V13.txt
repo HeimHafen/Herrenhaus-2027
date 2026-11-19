@@ -1,0 +1,10 @@
+Herrenhaus 2027 V13 — ORIGINALFENSTER-EINBAUTEST
+
+- Nutzer-GLB 'Abandoned building window with arabic text' geometrisch und lizenzseitig untersucht.
+- 49.999 Dreiecke, 26.797 Vertices, drei 4096px-Texturen im Upload.
+- Je eine mobile 1024px und Desktop 2048px Version der originalen GLB abgeleitet.
+- Eine einzige optische Teststelle in der Nordfassade: x=-15, erste Etage.
+- Testansicht: ?view=historic-window&build=v13
+- Standardansicht: unveränderter V12-Look, das zusätzliche Modell wird nicht geladen.
+- Autor-/Lizenzhinweis im Bild und in NOTICE/README.
+- Keine großflächige Wiederholung des schweren Modells, keine Änderung der Innenräume.

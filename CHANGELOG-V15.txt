@@ -1,0 +1,9 @@
+Herrenhaus 2027 – V15 Fensteröffnung / Lichtabgleich
+
+1. Opaque Fenster-Hinterlegungsplatten an Nord, Süd, Ost und West entfernt.
+2. 4-seitige Leibungsprofile als echte 3D-Körper an deren Stelle gesetzt.
+3. Schwaches Tageslicht-Bounce-Light für Vorder- und Rückportikus.
+4. V14-PBR-Materialien, Säulen und Innenräume unverändert.
+5. V15-Regressionstest prüft, dass keine flächigen massiven Hinterlegungen mehr existieren.
+
+Grenze: Keine gemessene reale Architektur und keine optische iPhone-Abnahme.

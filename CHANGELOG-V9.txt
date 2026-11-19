@@ -1,0 +1,14 @@
+WEISSES HAUS 2027 – V9: GEOMETRIEKORREKTUREN
+
+1. Ursachenkorrektur: alle 44 importierten, alten Eckstein-Meshes Cube.375 bis Cube.418 werden ausgeblendet.
+2. Nur ein schlanker Ecksteinschmuck verbleibt, direkt an Wandebenen ausgerichtet.
+3. Gemeinsames Fensterachsen-Raster (window-layout.js) für Architektur und neue Außenrahmen.
+4. Seitenfenster -9,-5,-1,3,7 statt der falsch verschobenen -8,-4,0,4,8.
+5. Geschosshöhen der äußeren Rahmen an bestehende Öffnungen bei 2.75, 7.80 und 11.90 angeglichen.
+6. Abstehende massive Fenster-Rückplatten entfernt; Glas liegt nahe der realen Außenwandöffnung.
+7. Doppelte zweite Dekorationsrahmen (exterior-details.js) entfernt.
+8. Sauberere und kleinere Fensterprofile und weniger überlagerte Dachdetails.
+9. Dünne PBR-Kalkstein-Außenhaut auf den vorhandenen Wandsegmenten um Fensteröffnungen (exterior-skin.js); keine geschlossenen Ersatzwände.
+10. Balustrade, sechs Säulen, Innenräume, Treppen und Touch-Steuerung aus V8 beibehalten.
+
+Grenze: Rein technische Geometrie-/Paketprüfungen. Keine visuelle WebGL- oder iPhone-Endabnahme und keine vermessene Rekonstruktion des historischen Originals.

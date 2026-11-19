@@ -1,0 +1,21 @@
+HERRENHAUS 2027 · V16 · 18.11.2026
+
+PORTAL / VORDERSEITE
+- Einheitliche symmetrische Portalwangen statt doppelter Steinrahmen.
+- Steintransom und Gewände bis zum Fußpunkt des Halbrund-Oberlichts ausgerichtet.
+- Oberlicht bekommt zurückhaltende innere Ansicht.
+- Außenleuchten und zugehörige Punktbeleuchtung entfernt.
+
+GESAMTES HAUS / INNENRAUM
+- Vollständigen separaten Marmor-Innenausbau aus dem Runtime-Import und Projekt entfernt.
+- Alle bisherigen Teppiche, Läufer, Marmorböden und Marmorfassungen im Innenraum entfernt.
+- Alle dekorativen Lampen, Leuchten, Bilder, Bänke, Möbel und Kandelaber entfernt.
+- Lokale Innen-Punktlichter entfernt, natürliches Tageslicht unverändert.
+- Neue glatte neutrale Deckenuntersichten in Eingang, State Floor und Obergeschoss.
+- Tragplatten, Laufböden im Rohbau, Stufen, Geländer, Wände, Durchgänge, Türbewegung erhalten.
+
+TECHNIK
+- Entfall von src/marble-entrance.js und assets/interior/.
+- Cache-Version auf 20261118-v16-rohbau erhöht.
+- Vorhandene JS-/Python-Geometrie-, Asset-, Modul- und Fassaden-Tests aktualisiert.
+- Sämtliche Tests erfolgreich; kein Anspruch auf Safari-Visual-Endabnahme.

@@ -1,0 +1,35 @@
+HERRENHAUS 2027 – V14 · IMPORTIERTE FASSADENQUELLEN
+
+Material 1: White wall texture
+Autor: PixelatoR
+Quelle: https://sketchfab.com/3d-models/white-wall-texture-87e21c64e53d4d099f5a606e6131d36f
+Originaldatei: white_wall_texture.glb (vom Nutzer hochgeladen)
+Lizenz laut GLB: Creative Commons Attribution 4.0 International
+https://creativecommons.org/licenses/by/4.0/
+
+Material 2: Plaster Wall
+Autor: slls666
+Quelle: https://sketchfab.com/3d-models/plaster-wall-fde81a6cf3ec466eb549a9961112cdd9
+Originaldatei: plaster_wall.glb (vom Nutzer hochgeladen)
+Lizenz laut GLB: Creative Commons Attribution 4.0 International
+https://creativecommons.org/licenses/by/4.0/
+
+Bearbeitung: Original-Texturen aus den GLB-Containern extrahiert,
+aus dem Putzscan den zusammenhängenden inneren Bereich ausgeschnitten,
+beide Bildquellen seam-blended, farblich neutralisiert und zu
+vier eigenen PBR-Materialfamilien kombiniert (Hauptfassade,
+Fenstereinfassungen/Zierprofile, Säulen und Sockel).
+Die Texturen wurden auf 1024 × 1024 Pixel verkleinert und als lokale
+JPEG-Dateien exportiert. Die schweren Original-GLB-Wandobjekte sind
+nicht im Projekt-ZIP enthalten; das beschleunigt den iPhone-Download.
+
+Die beiden Urheber und Original-Quellen müssen bei jeder öffentlichen
+Veröffentlichung dieser abgeleiteten Materialien genannt bleiben.
+Das beiliegende Lizenz- und Quellenverzeichnis ist Teil des Releases.
+
+Weiterhin enthaltenes optionales Einzelfenster aus V13:
+Titel: Abandoned building window with arabic text
+Urheber: Nik (Sketchfab: https://sketchfab.com/nikska)
+Quelle: https://sketchfab.com/3d-models/abandoned-building-window-with-arabic-text-10e8f02523fb424780c4c61d85c514af
+Lizenz laut GLB: CC BY 4.0
+Dieses Modell erscheint nur bei ?view=historic-window als Einbautest.

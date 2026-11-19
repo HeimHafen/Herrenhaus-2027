@@ -1,0 +1,32 @@
+Herrenhaus 2027 – V19 · Nordportal, Eingangsflur und Rohbaukorrektur
+
+1. WIRKLICHE ALTLAMPEN ENTFERNT
+- Die GLB-Quellobjekte Cube.518, Cube.519, Cube.520 und Cube.521 (zwei
+  Leuchten links/rechts im Eingang, je Wandhalter und Lampenkörper) werden
+  im Renderer deaktiviert. Keine neuen sichtbaren Lichtquellen hinzugefügt.
+
+2. EINGANGSPORTAL / MARKIERTE BOGENENDEN
+- Die offenen Rundrohr-/Tube-Ringe wurden durch einen einzigen
+  geschlossenen extrudierten Steinbogen mit exakten Stützpunkten ersetzt.
+- Seitliche stummelartige Anschlusskästen entfallen.
+- Innenrahmen und Glassprossen verwenden konsistente Achsen und Spannweiten.
+- Der steinerne Türsturz schließt unter der einheitlichen Bogen-Springlinie ab.
+
+3. DECKE UND DURCHGANG
+- Der ursprüngliche Import enthält über dem Eingang ein sichtbares altes
+  Bauteil Cube.003 mit Unterkante y=4.30m; der vorige Deckeneinbau bei
+  y=5.025m lag unsichtbar dahinter. Jetzt liegt eine helle glatte Sichtdecke
+  knapp darunter bei y=4.277m. Keine Lampe notwendig.
+- Der auffällige übergroße Querriegel am inneren Durchgang wurde zugunsten
+  einer höheren Öffnung mit schlankem Türsturz verkleinert.
+
+4. ORIGINALSTEINFLIESEN
+- Der V18-Natursteinboden bleibt nur im nordseitigen Eingangsflur.
+- Die Bodenfläche reicht bis direkt an die Eingangsschwelle.
+- Schwelle auf gleiche fertige Höhe gebracht, kein stark abgesetzter Absatz.
+
+5. VERSION
+- Sichtbare V19-Kennung, neue Modul-Cacheparameter für Safari.
+- Keine Änderungen an den anderen Innenräumen, Treppenhäusern,
+  Außenfassaden, Türen, Steuerung oder Landschaft.
+- Live-Ergebnis auf einem iPhone nicht geprüft; Tests sind simuliert.

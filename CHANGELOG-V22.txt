@@ -1,0 +1,12 @@
+Herrenhaus 2027 – V22
+
+- Echte Castle Style Door von Visthétique (CC BY 4.0) integriert.
+- Alte generierte Eichen-Doppeltür entfernt; beide Originalflügel einzeln beweglich.
+- Originalbogen der Tür bildet jetzt EIN zusammengehöriges 3D-Objekt mit Türrahmen;
+  kein separates aufgesetztes Oberlicht des alten Projekts.
+- Originalmodell uniform auf 2,645 × 3,321 m skaliert, mit niedriger Türschwelle.
+- 74 originale Double-hung-Fenster (6-over-6, CC0) mit proportionalem Maßstab,
+  ohne separat geladene Duplikate und ohne alte Fensterüberlagerungen integriert.
+- Fotografische Türtexturen für iPhone-Performance verkleinert.
+- Lizenz- und Urheberhinweise ergänzt.
+- Versionskennung und Cache-Busting auf V22.

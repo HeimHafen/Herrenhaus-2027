@@ -1,0 +1,6 @@
+V9.1 HOTFIX – 18.11.2026
+- paintedSash temporal dead zone fixed in facade.js
+- single architectural entrance fanlight module added, with coherent profiles
+- legacy double and floating fanlight arch geometry removed
+- new runtime test for entire facade build and fanlight geometry
+- versioned imports and project docs updated

@@ -1,0 +1,39 @@
+HERRENHAUS 2027 – V21 ROOT-FIX (18.11.2026)
+
+URSACHE
+Die frueheren ZIP-Dateien enthielten ueberfluessige Oberordner namens
+v21_update bzw. wh_v21. Diese Verzeichnisse wurden in deinem GitHub-Repository
+angelegt, statt die aktiven Dateien im Hauptverzeichnis zu ueberschreiben.
+
+DIESES ZIP IST KORREKT GEBAUT:
+index.html
+src/main.js
+src/facade.js
+src/oak-door.js
+src/architecture.js
+
+INSTALLATION IN WORKING COPY
+1. Falls moeglich vorher den jetzigen Repo-Stand sichern.
+2. Das ROOT-FIX-ZIP entpacken.
+3. Die entpackte index.html muss direkt im Stammverzeichnis deines
+   Repositories Weisses-Haus-2027-Projekt liegen (neben README.md).
+4. Die vier entpackten JS-Dateien muessen in den vorhandenen Ordner
+   src/ gelangen und ihre gleichnamigen Vorganger ersetzen.
+5. KEINEN Ordner wie v21_update oder wh_v21 neu anlegen.
+6. In Working Copy die geaenderten Stammdateien committen und nach
+   refs/heads/main pushen; Force Push AUS.
+7. Auf GitHub direkt im Repository-Hauptverzeichnis index.html oeffnen:
+   Dort muss V21 stehen; erst danach die Website in Safari aufrufen.
+8. Die falsch zusaetzlich importierten Verzeichnisse v20_update und wh_v21
+   koennen nach erfolgreicher Verifikation entfernt werden (nicht vorher).
+
+WORKING COPY
+Zusammenfassung: V21-FIX – richtige Stammdateien, hoher Eichen-Eingang ohne Bogen
+Detaillierte Informationen: Deployment-Fehler durch ZIP-Oberordner korrigiert.
+V21-Dateien fuer den aktiven Repo-Stamm: index.html und src/{main,facade,oak-door,architecture}.js.
+Bogen entfernt; hoehere Eichen-Doppeltuer; gerader Portalabschluss; Fliesen im
+Eingangsflur unveraendert.
+
+TECHNISCHE NOTIZ
+Ein Versionsparameter in der URL ?build=v21 ersetzt nicht automatisch
+index.html. Die Hauptdatei muss direkt im Repo-Stamm aktualisiert sein.

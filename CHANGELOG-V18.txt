@@ -1,0 +1,7 @@
+Herrenhaus 2027 V18
+- Im Eingangsflur Fotomaterial aus der vom Nutzer bereitgestellten GLB in ein lokal begrenztes Natursteinmaterial übernommen.
+- Kompakte JPG-Fototextur und feiner Bump; keine GLB-Treppen, zusätzlichen Wände, Massiven oder fremden Laufwege.
+- Sichtbarer V18-Marker im App-Titel und cache-busting Modulimporte.
+- Innenraum bleibt V16-Rohbau außerhalb des Flurs.
+- Working Copy Git-Index-Sperre verhindert Commit und Push; muss lokal behoben werden.
+- Künstlernachweis: Vasilis Haroupas, Entrance Floor Tiles; vor öffentlicher Veröffentlichung Lizenz prüfen.

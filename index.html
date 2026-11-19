@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="de" data-build="20261119-v84-grundriss">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#23322e">
+<title>Herrenhaus 2027 – Historischer Palast</title>
+<style>
+  :root{color-scheme:dark;--panel:#20332fe9;--stroke:#e7dac9aa;--text:#fff9ec}
+  *{box-sizing:border-box}
+  html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#b6d0e3;color:var(--text);font:15px system-ui,-apple-system,sans-serif}
+  #viewport,canvas{display:block;width:100%;height:100%;touch-action:none}
+  #hud{position:fixed;inset:max(12px,env(safe-area-inset-top)) 14px auto 14px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;pointer-events:none}
+  .card{padding:12px 15px;background:var(--panel);backdrop-filter:blur(10px);border:1px solid #ffffff2b;border-radius:16px;box-shadow:0 8px 24px #11262218}
+  h1{font:600 21px/1.18 Georgia,serif;letter-spacing:.1px;margin:0 0 4px}
+  #status{font-size:12px;line-height:1.35;color:#efe6d7}
+  #ui-right{display:flex;flex-flow:column;align-items:flex-end;gap:8px;pointer-events:auto}
+  label{font-size:11px;display:block;margin-bottom:4px;color:#f5eadd}
+  select,button{font:inherit;color:var(--text);background:#20332ff0;border:1px solid var(--stroke);border-radius:12px}
+  select{padding:9px 31px 9px 10px;max-width:220px}
+  button{cursor:pointer;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;touch-action:none}
+  #outside,#entrance{padding:10px 13px;font-size:13px;white-space:nowrap}
+  #view-buttons{display:flex;gap:6px}
+  #controls{position:fixed;bottom:max(22px,env(safe-area-inset-bottom));left:14px;display:grid;grid-template-columns:repeat(3,50px);grid-template-rows:repeat(2,50px);gap:5px}
+  #controls button{font-size:24px;font-weight:700;background:#20332fe8;border:1px solid #d5dacc9c}
+  #controls button:active{background:#aa8c65}
+  #help{position:fixed;bottom:max(22px,env(safe-area-inset-bottom));right:14px;font-size:12px;pointer-events:none;background:#20332fbd;padding:8px 11px;border-radius:10px}
+  #imported-model-credit{position:fixed;left:50%;transform:translateX(-50%);bottom:max(94px,env(safe-area-inset-bottom));z-index:9;padding:7px 11px;border-radius:8px;color:#fdf9f0;background:#202a25d9;font:11px system-ui,sans-serif;white-space:nowrap}
+  #imported-model-credit a{color:#f6e6c5}
+  #model-license{position:fixed;bottom:max(100px,env(safe-area-inset-bottom));left:14px;max-width:45vw;color:#f6eadb;font:10px/1.4 system-ui,sans-serif;background:#20332fbd;border-radius:8px;padding:5px 7px;opacity:.76}
+  #model-license a{color:inherit;text-decoration:underline}
+  #error{position:fixed;top:40%;left:8%;right:8%;padding:18px;white-space:normal;overflow-wrap:anywhere;background:#472e2bf0;border:1px solid #f7ccc1;border-radius:14px}
+  [hidden]{display:none!important}
+  @media(max-width:600px){
+    #hud{left:10px;right:10px;gap:6px}h1{font-size:17px}
+    .card{padding:9px 10px;max-width:56vw}
+    #status{font-size:11px}select{padding:8px 14px 8px 7px;max-width:130px;font-size:12px}
+    label{font-size:10px}#outside{padding:8px 10px;font-size:12px}
+    #view-buttons{flex-direction:column;align-items:stretch}
+    #entrance{padding:8px 10px;font-size:12px}
+    #controls{left:10px;bottom:max(12px,env(safe-area-inset-bottom));grid-template-columns:repeat(3,49px);grid-template-rows:repeat(2,49px)}
+    #model-license{left:10px;bottom:max(130px,env(safe-area-inset-bottom));max-width:48vw;font-size:9px}
+    #help{bottom:max(13px,env(safe-area-inset-bottom));right:10px;max-width:145px;text-align:right;font-size:10px}
+  }
+    #status { user-select: none; -webkit-user-select: none; }
+  </style>
+<script type="importmap">{"imports":{"three":"./vendor/three/build/three.module.js","three/addons/":"./vendor/three/examples/jsm/"}}</script>
+</head>
+<body>
+<main id="viewport" aria-label="3D-Rundgang durch das historische Herrenhaus"></main>
+<div id="hud">
+  <div class="card"><h1>Herrenhaus 2027 <span id="build-version" title="Projekt-Version" style="font:600 10px system-ui;letter-spacing:.06em;opacity:.75;white-space:nowrap">V84</span></h1><div id="status" aria-live="polite">Lade 3D-Gebäude …</div></div>
+  <div id="ui-right">
+    <div class="card"><label for="floor-select">Etage / Startpunkt</label><select id="floor-select" aria-label="Etage auswählen"><option value="0">Gartengeschoss</option><option value="1">Hauptgeschoss</option><option value="2">Wohngeschoss</option></select></div>
+    <div id="view-buttons"><button id="outside" type="button">Außenansicht</button><button id="entrance" type="button">Eingang</button></div>
+  </div>
+</div>
+<div id="controls" aria-label="Bewegung">
+  <div></div><button type="button" data-key="w" aria-label="Vorwärts">↑</button><div></div>
+  <button type="button" data-key="a" aria-label="Links">←</button>
+  <button type="button" data-key="s" aria-label="Rückwärts">↓</button>
+  <button type="button" data-key="d" aria-label="Rechts">→</button>
+</div>
+<div id="help">WASD · Pfeile · Treppen begehbar · Ziehen zum Umschauen</div>
+<div id="imported-model-credit" hidden>3D-Fenster: <a href="https://sketchfab.com/3d-models/abandoned-building-window-with-arabic-text-10e8f02523fb424780c4c61d85c514af" target="_blank" rel="noopener noreferrer">Nik / Sketchfab</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a> · Texturen reduziert</div>
+<div id="model-license">Massive Eichen-Doppeltür · hell geölt</div>
+<div id="error" role="alert" hidden></div>
+<script type="module">
+  import('./src/main.js?v=20261119-v84-grundriss').catch(showStartError);
+  function showStartError(error) {
+    document.getElementById('status').textContent = 'Der Rundgang konnte nicht starten.';
+    const details = document.getElementById('error');
+    details.textContent = error.message || String(error);
+    details.hidden = false;
+    console.error(error);
+  }
+</script>
+</body>
+</html>

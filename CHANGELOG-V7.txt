@@ -1,0 +1,13 @@
+WEISSES HAUS 2027 – VERSION V7 – 18.11.2026
+
+- Komplettprojekt auf Basis von V6, kein Patch
+- Südportikus: profilierte Steinbaluster, als InstancedMesh ausgeführt
+- 6 gerade ionische Säulen und südlicher rechteckiger Balkon unverändert
+- V6-Neutralweiß statt cremefarbiger Außenhülle beibehalten
+- iPhone-high Grafikmodus: weniger aggressive DPR-/Schattenkarte
+- West-/Ostansicht für die Außenprüfung hinzugefügt
+- GitHub-Pages-Wurzelstruktur und Versionierung vereinheitlicht
+- Projekt- und Dateivalidierung erweitert
+
+Bekannte Grenzen: Kein realer Safari-Render-/FPS-Test, kein Millimetervergleich
+mit echten Bauplänen, Abhängigkeit von Three.js-CDN im laufenden Browser.

@@ -1,0 +1,15 @@
+3D WINDOW MODEL — ORIGINAL SOURCE AND ATTRIBUTION
+
+Title: Abandoned building window with arabic text
+Author: Nik (https://sketchfab.com/nikska)
+Original model: https://sketchfab.com/3d-models/abandoned-building-window-with-arabic-text-10e8f02523fb424780c4c61d85c514af
+License recorded in the uploaded GLB's asset.extras: Creative Commons Attribution 4.0 International
+License URL: https://creativecommons.org/licenses/by/4.0/
+
+Modifications for the Herrenhaus-2027 V13 preview:
+- embedded texture resolution reduced from 4096 px to 2048 px and 1024 px;
+- the original mesh geometry, UV coordinates, orientation, material channels and inscription retained;
+- scaled and positioned as a single optional first-floor test window in a neoclassical villa scene.
+
+This is not a claim of ownership. The author should be credited when sharing
+or redistributing this model or adaptations, in accordance with CC BY 4.0.

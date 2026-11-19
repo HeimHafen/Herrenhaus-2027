@@ -1,0 +1,7 @@
+Herrenhaus 2027 – CHANGELOG V21
+
+- Tür sichtbar höher ausgeführt.
+- Tür leicht verbreitert.
+- Gerader Portalabschluss höher gesetzt.
+- Innerer Durchgang höher gesetzt.
+- V21 Versions-/Cachekennung aktualisiert.

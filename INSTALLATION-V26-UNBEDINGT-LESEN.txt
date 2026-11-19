@@ -1,0 +1,36 @@
+HERRENHAUS V26 – KORREKTE EINRICHTUNG IN WORKING COPY / GITHUB PAGES
+
+WICHTIG: Die vorherige ZIP enthielt einen verschachtelten alten Ordner.
+Dieses Paket hat den Projektinhalt direkt an der obersten Ebene.
+
+EMPFOHLEN: 1) VOLLPPAKET AUSPACKEN 2) den INHALT in die Wurzel
+(main) des vorhandenen GitHub-Repositories übertragen – NICHT einen
+zusätzlichen Ordner „Herrenhaus-2027-main“ anlegen.
+Die neue index.html muss DIREKT auf derselben Ebene wie src/ und assets/ liegen.
+Dort müssen auch src/main.js, src/oak-door.js und
+assets/wood/eiche-dunkel-v26.jpg liegen.
+
+Wenn du nur das Mini-Update nutzt: Die Ordnerpfade im ZIP genau so
+ins Repository kopieren. ALLE Dateien überschreiben, insbesondere
+index.html UND src/main.js. Nur oak-door.js allein ändert NICHTS!
+
+In Working Copy Commit erstellen und nach refs/heads/main PUSHEN.
+Source-Branch: main. Force Push: AUS.
+Commit-Kurztitel: V26: Aktive Rundbogentür durch massive Eichendoppeltür ersetzt
+Commit-Details: V25-Entrypoint repariert, Castle-Style-Import abgeschaltet,
+rechteckige Echtholztür mit zwei animierten Flügeln eingebaut, Fenster/Säulen
+unverändert, Cache- und Versionskennung V26, verschachtelte Altdateien bereinigt.
+
+NACH DEM PUSH:
+- GitHub Pages öffnen: https://heimhafen.github.io/Herrenhaus-2027/?view=door&v=26
+- Oben MUSS „V26“ angezeigt werden. Bei V25 wird die alte Root-Datei geladen.
+- Neue rechteckige dunkle Eichendoppeltür mit Kassetten und Bronzegriffen prüfen.
+- Tür öffnet bei Annäherung automatisch.
+- Falls nach dem Push V25 erscheint: GitHub > Repository > Code > main prüfen,
+  ob index.html, src/main.js und src/oak-door.js im ROOT aktualisiert wurden.
+  Erst danach Safari-Seite neu öffnen.
+
+TECHNISCHER STATUS:
+Dateistruktur, Skriptimport, Türgeometrie und Codepfade automatisiert geprüft.
+Eine echte Safari- oder WebGL-End-to-End-Prüfung war hier ohne ladbares
+CDN-Modul nicht möglich. Bitte den Screenshot erst nach dem Push zur Sichtprüfung nehmen.

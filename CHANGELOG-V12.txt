@@ -1,0 +1,18 @@
+HERRENHAUS 2027 – V12 | Historischer Sandstein & Ornamentfenster
+
+1. Sandsteinfarbwelt als neue Außenidentität, kühl-warmes Taupe statt Kunststoffweiß.
+2. Weltkoordinaten-basierte, versetzte Sandsteinlagen über die gesamte Fassadenhülle;
+   Fugen, natürliche Farbunterschiede und Patina shaderbasiert, kein externes Modell.
+3. 18 neue 3D-Ornamentfenster im symmetrischen Fassadenraster:
+   sechs Nord, sechs Süd und sechs seitliche Akzentfenster.
+4. Ausgebildete Steinrahmen, Konsolen, Kartuschen, Rosetten und Reliefs;
+   keine übernommenen fremden Schriftzeichen oder Copyright-Assets.
+5. Sechs vordere Säulen und sechs hintere Säulen bleiben erhalten;
+   zwölf kleinere Kapitell-/Rosettendetails ergänzen sie.
+6. Dünnere, zurückhaltende Eckquader, ältere Blockstapeldarstellung reduziert.
+7. Untergeschosse, Innenräume, Treppen, Landschaft und Touch-Steuerung übernommen.
+
+Technische Einschränkung:
+Die bestehende Nordwand besitzt teilweise keine vollständig ausgeschnittenen
+Fensteröffnungen. Das ist in V12 nicht neu modelliert worden. Ein echter
+WebGL-/Safari-Sichttest ist vor einer Qualitätsfreigabe weiterhin notwendig.

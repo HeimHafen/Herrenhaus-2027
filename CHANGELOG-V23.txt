@@ -1,0 +1,9 @@
+Herrenhaus 2027 – V23 Fehlerbehebung
+
+- Behebt Startfehler: Original-Tuerfluegel fehlt: Frame.002
+- Three.js / GLTFLoader bereinigt Sonderzeichen in GLB-Knotennamen.
+- Original-Tuerfluegel werden jetzt robust über normalisierte Namen / Mesh-Inhalte gefunden.
+- Beide Fluegel behalten eigene Scharniere und automatische Animation.
+- Sichere Reserve: Unbekannte Knotennamen stoppen nicht mehr die gesamte 3D-Szene.
+- Keine geaenderte Fensterskalierung, Fassaden- oder Bodengeometrie.
+- Versions-/Cachekennung V23.

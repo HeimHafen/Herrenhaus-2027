@@ -1,0 +1,8 @@
+Herrenhaus 2027 – CHANGELOG V20
+
+- Nordportal: Halbkreisbogen entfernt.
+- Neue Portalwirkung: gerader hoher Kopfabschluss.
+- Massive Eichen-Doppeltuer hoeher ausgefuehrt.
+- Eingangsflur: historische Fliesen beibehalten.
+- Innerer Rohbau-Durchgang im Eingangsbereich hoeher gesetzt.
+- Cache-/Versionskennung auf V20 aktualisiert.

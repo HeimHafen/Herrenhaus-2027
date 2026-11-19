@@ -1,0 +1,25 @@
+V23 – gezielte Fehlerbehebung für den Start von Herrenhaus-2027
+
+Das V22-Modell ist in Ordnung, aber der GLTFLoader bereinigt Frame.002 zu Frame_002.
+Deshalb findet der bisherige Türcode den vorhandenen Flügel nicht.
+
+Working Copy: V23 ROOT-FIX-ZIP entpacken; NUR DIE ENTHALTENEN DATEIEN
+ins bestehende Repository Herrenhaus-2027 auf main kopieren, mit Ersetzen.
+Keinen neuen Unterordner anlegen; nicht das ganze Repository löschen.
+
+Drei vorhandene Dateien ersetzen:
+  index.html
+  src/main.js
+  src/castle-door-import.js
+Neu hinzufügen:
+  CHANGELOG-V23.txt
+  ANLEITUNG-V23-FIX.txt
+
+Commit Zusammenfassung:
+V23 – Türflügel-Startfehler behoben, Originalmodelle bleiben erhalten
+
+Commit detaillierte Informationen:
+GLTFLoader-kompatible Suche nach Frame.001/Frame.002; beide Original-Türflügel mit separaten Scharniergruppen; kein Abbruch der gesamten Szene bei unbekannten Namen; Version V23.
+
+Push: refs/heads/main, Force Push AUS.
+Im Browser danach Version V23 prüfen.

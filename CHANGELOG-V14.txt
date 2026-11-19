@@ -1,0 +1,18 @@
+HERRENHAUS 2027 · V14 NATURSTEIN & PATINA
+
+- 12 neue, lokale PBR-Bilddateien aus 2 Nutzer-GLB-Materialquellen
+- 4 Materialgruppen: Fassadenquader, Gesimse/Fenstereinfassungen,
+  Säulen/Kapitelle, Sockel/Treppen
+- 1024-Pixel-Texturen für iPhone-Last reduziert; keine großen Quell-GLBs laden
+- Albedo, Normal und Rauheit separat eingebaut
+- Historisches Steinverbandsmuster in der Shader-Färbung verfeinert:
+  zurückhaltendere Fugen und dezente Farbabweichung statt Liniengitter
+- Große Säulenportiken vorn/hinten unverändert
+- Innenräume, Steuerung, Treppen und V13-Einzelfenstertest unverändert
+- Neue dokumentierte CC BY 4.0-Namensnennungen in NOTICE-MATERIALIEN-V14.txt
+
+EINSCHRÄNKUNG:
+Die Original-GLB-Oberflächen sind keine garantiert nahtlos kachelbaren
+Fassadenmaterialien. Die Derivate wurden am Rand überblendet, die
+Tatsachenprüfung auf mobilem Safari bleibt erforderlich. Dies ist
+noch keine millimetergenaue architektonische Rekonstruktion.
