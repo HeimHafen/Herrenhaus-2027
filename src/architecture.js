@@ -1,5 +1,5 @@
 import { WEST_CORE } from './stair-layout.js?v=76';
-import { addStonePanelling, buildGardenHall } from './garden-hall.js?v=85';
+import { addStonePanelling, buildGardenHall } from './garden-hall.js?v=86';
 import { WEST_STAIR } from './stair-navigation.js?v=76';
 import { buildManorPlan } from './manor-plan.js?v=84';
 import { portalLintelY } from './north-portal.js?v=29';

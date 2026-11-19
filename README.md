@@ -1,4 +1,8 @@
-# Herrenhaus 2027 · V85
+# Herrenhaus 2027 · V86
+
+## V86 · Wandgestaltung
+
+Eingang, Windfang und Halle erhalten fein strukturierten Kalkputz in warmem Elfenbein über sandfarbenen Wandkassetten mit profilierten Leisten.
 
 ## V85 · Eingang, Windfang und Halle
 

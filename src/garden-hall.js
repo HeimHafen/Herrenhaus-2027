@@ -36,12 +36,12 @@ export function addLimestoneFloor(THREE,group,material,x,y,z,width,depth) {
   return surface;
 }
 
-export function addStonePanelling(THREE,group,base,spans) {
+export function addStonePanelling(THREE,group,base,spans,painted=false) {
   const grain=texture(THREE,'entry-finish/kalkputz-relief.jpg');
   const panel=new THREE.MeshStandardMaterial({
-    color:0xbca991, roughness:.83, bumpMap:grain,bumpScale:.0007
+    color:painted?0xd2c5b0:0xbca991, roughness:.83, bumpMap:grain,bumpScale:.0007
   });
-  const profile=new THREE.MeshStandardMaterial({color:0xd1bda4,roughness:.76});
+  const profile=new THREE.MeshStandardMaterial({color:painted?0xe1d4bf:0xd1bda4,roughness:.76});
   const tile=new THREE.BoxGeometry(1,1,1);
   const parts=new Map([[panel,[]],[profile,[]]]);
   for(const {x,z,length,alongX,side} of spans){
@@ -50,6 +50,10 @@ export function addStonePanelling(THREE,group,base,spans) {
       transform.setPosition(x+(alongX?u:side*projection),base+height,z+(alongX?side*projection:u));
       parts.get(material).push(transform);
     };
+    if(painted){
+      piece(profile,0,.963,.029,length,.040,.060);
+      piece(profile,0,.105,.032,length,.029,.048);
+    }
     piece(panel,0,.45,.013,length,.90,.026);
     piece(profile,0,.90,.027,length,.047,.033);
     piece(profile,0,.933,.034,length,.019,.049);
@@ -72,6 +76,29 @@ export function addStonePanelling(THREE,group,base,spans) {
     matrices.forEach((matrix,index)=>mesh.setMatrixAt(index,matrix));
     group.add(mesh);
   }
+}
+
+export function addManorWallFinish(THREE,group,base,spans) {
+  const plaster=new THREE.MeshStandardMaterial({
+    color:0xece1d0,roughness:.95,
+    bumpMap:texture(THREE,'entry-finish/kalkputz-relief.jpg'),bumpScale:.001
+  });
+  for(const {x,z,length,alongX,side,top} of spans){
+    const height=top-base-.90;
+    if(height<=0)continue;
+    const geometry=new THREE.PlaneGeometry(length,height);
+    const uv=geometry.attributes.uv;
+    for(let i=0;i<uv.count;i++){
+      uv.setXY(i,((alongX?x:z)+(uv.getX(i)-.5)*length)*.7,uv.getY(i)*height*.7);
+    }
+    const face=new THREE.Mesh(geometry,plaster);
+    face.name='Kalkputz_Eingang_Windfang_Halle';
+    face.rotation.y=alongX?(side>0?0:Math.PI):side*Math.PI/2;
+    face.position.set(x+(alongX?0:side*.003),base+.90+height/2,z+(alongX?side*.003:0));
+    face.receiveShadow=true;
+    group.add(face);
+  }
+  addStonePanelling(THREE,group,base,spans,true);
 }
 
 export function buildGardenHall(THREE,group,level,walls,plaster,slabs,rooms) {
@@ -112,7 +139,7 @@ export function buildGardenHall(THREE,group,level,walls,plaster,slabs,rooms) {
     group.add(bounce);
   }
 
-  const spans=[];
+  const spans=[], manorSpans=[];
   const casing=new THREE.MeshStandardMaterial({color:0xd8cbbb,roughness:.81});
   for(const [x,width] of northOpenings[0]){
     const z=HALL_NORTH-.098;
@@ -132,17 +159,24 @@ export function buildGardenHall(THREE,group,level,walls,plaster,slabs,rooms) {
     const alongX=depth===.17;
     if(!alongX&&width!==.17)continue;
     for(const side of [-1,1]){
-      const px=x+(alongX?0:side*.10), pz=z+(alongX?side*.10:0);
-      const room=rooms.find(({x1,x2,z1,z2})=>px>x1&&px<x2&&pz>z1&&pz<z2);
-      if(!room||fittedRooms.has(room.name))continue;
+      const normal=alongX?z+side*.10:x+side*.10;
       const length=alongX?width:depth;
-      const begin=(alongX?x:z)-length/2;
-      const end=begin+length;
-      if(end<=begin)continue;
-      const middle=(begin+end)/2;
-      spans.push({x:alongX?middle:x+side*.085,z:alongX?z+side*.085:middle,
-        length:end-begin,alongX,side});
+      const center=alongX?x:z;
+      for(const room of rooms){
+        if(fittedRooms.has(room.name))continue;
+        const [min,max]=alongX?[room.z1,room.z2]:[room.x1,room.x2];
+        if(normal<=min||normal>=max)continue;
+        const [from,to]=alongX?[room.x1,room.x2]:[room.z1,room.z2];
+        const start=Math.max(center-length/2,from);
+        const end=Math.min(center+length/2,to);
+        if(end-start<.05)continue;
+        const middle=(start+end)/2;
+        const finishes=room.name==='Halle'||room.name==='Windfang'?manorSpans:spans;
+        finishes.push({x:alongX?middle:x+side*.085,z:alongX?z+side*.085:middle,
+          length:end-start,alongX,side,top:level.top-.03});
+      }
     }
   }
+  addManorWallFinish(THREE,group,floor,manorSpans);
   addStonePanelling(THREE,group,floor,spans);
 }
