@@ -1,5 +1,5 @@
 import { WEST_CORE } from './stair-layout.js?v=76';
-import { addStonePanelling, buildGardenHall } from './garden-hall.js?v=86';
+import { addManorWallFinish, buildGardenHall } from './garden-hall.js?v=87';
 import { WEST_STAIR } from './stair-navigation.js?v=76';
 import { buildManorPlan } from './manor-plan.js?v=84';
 import { portalLintelY } from './north-portal.js?v=29';
@@ -261,7 +261,7 @@ export function buildEmptyInterior(THREE, scene) {
 
   }
   closeGroundFloor();
-  buildGardenHall(THREE,structure,levels[0],hallWalls,plaster,gardenSlabs,gardenRooms);
+  
   // The two stair cores share the same stonework and runner construction.
   function finishBox(material,x,y,z,width,height,depth,level,blocking,name){
     return box(x,y,z,width,height,depth,material,level,blocking,name);
@@ -313,13 +313,40 @@ export function buildEmptyInterior(THREE, scene) {
   const lowerLanding=(garden.floor+levels[1].floor)/2;
   const returnSlope=(lowerLanding-levels[1].floor)/(westWell.turn-westWell.start);
   const soffitY=z=>levels[1].floor+(z-westWell.start)*returnSlope-.28;
-  // Fit the infill continuously to the underside at the wall's rear face.
-  const wallTop=soffitY(wallZ+.085)+.015;
-  finishBox(warmPlaster,wallX,(garden.floor+wallTop)/2,wallZ,
-    wallWidth,wallTop-garden.floor,.17,0,true,'Westtreppe_Geschlossene_Podestwand');
-  addStonePanelling(THREE,structure,garden.floor+.046,[
-    {x:wallX,z:wallZ-.085,length:wallWidth,alongX:true,side:-1}
+  const wallFront=wallZ-.085;
+  const wallTop=soffitY(wallFront)+.012;
+  const undersideEdge=westWell.laneB-westWell.width/2-.018;
+  const shoulder=wallTop-.53;
+  const profile=new THREE.Shape();
+  profile.moveTo(wallLeft,garden.floor);
+  profile.lineTo(wallRight,garden.floor);
+  profile.lineTo(wallRight,wallTop);
+  profile.lineTo(undersideEdge,wallTop);
+  profile.lineTo(undersideEdge,shoulder+.17);
+  profile.quadraticCurveTo(undersideEdge,shoulder,undersideEdge-.17,shoulder);
+  profile.lineTo(wallLeft,shoulder);
+  profile.closePath();
+  const infill=new THREE.Mesh(new THREE.ExtrudeGeometry(profile,{depth:.17,bevelEnabled:false,curveSegments:12}),warmPlaster);
+  const vertices=infill.geometry.attributes.position;
+  for(let i=0;i<vertices.count;i++){
+    if(vertices.getY(i)>shoulder){
+      vertices.setY(i,Math.min(vertices.getY(i),soffitY(wallFront+vertices.getZ(i))+.012));
+    }
+  }
+  infill.geometry.computeVertexNormals();
+  infill.position.z=wallFront;
+  infill.name='Westtreppe_Profilierte_Podestwand';
+  infill.castShadow=infill.receiveShadow=true;
+  structure.add(infill);
+  walls[0].push({x:wallX,z:wallZ,hw:wallWidth/2,hd:.085});
+  // The exposed shoulder stays below the adjacent stair rail.
+  const capWidth=undersideEdge-.17-wallLeft;
+  finishBox(railStone,wallLeft+capWidth/2,shoulder+.023,wallZ,
+    capWidth,.046,.19,-1,false,'Westtreppe_Steinabdeckung');
+  addManorWallFinish(THREE,structure,garden.floor+.046,[
+    {x:wallX,z:wallFront,length:wallWidth,alongX:true,side:-1,top:shoulder}
   ]);
+  buildGardenHall(THREE,structure,garden,hallWalls,plaster,gardenSlabs,gardenRooms,wallFront);
 
   const well=wells.find(w=>w.center<0);
   // Inlaid stone extends to the portal and meets the surrounding floor flush.

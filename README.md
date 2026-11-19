@@ -1,4 +1,8 @@
-# Herrenhaus 2027 · V86
+# Herrenhaus 2027 · V87
+
+## V87 · Anschluss der Haupttreppe
+
+Die Untertreppennische erhält das durchgehende Steinraster der Halle. Die Podestwand folgt der Treppenuntersicht und erhält eine abgerundete Schulter mit Steinabschluss.
 
 ## V86 · Wandgestaltung
 

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="de" data-build="20261119-v86-wandgestaltung">
+<html lang="de" data-build="20261119-v87-treppenanschluss">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -49,7 +49,7 @@
 <body>
 <main id="viewport" aria-label="3D-Rundgang durch das historische Herrenhaus"></main>
 <div id="hud">
-  <div class="card"><h1>Herrenhaus 2027 <span id="build-version" title="Projekt-Version" style="font:600 10px system-ui;letter-spacing:.06em;opacity:.75;white-space:nowrap">V86</span></h1><div id="status" aria-live="polite">Lade 3D-Gebäude …</div></div>
+  <div class="card"><h1>Herrenhaus 2027 <span id="build-version" title="Projekt-Version" style="font:600 10px system-ui;letter-spacing:.06em;opacity:.75;white-space:nowrap">V87</span></h1><div id="status" aria-live="polite">Lade 3D-Gebäude …</div></div>
   <div id="ui-right">
     <div class="card"><label for="floor-select">Etage / Startpunkt</label><select id="floor-select" aria-label="Etage auswählen"><option value="0">Gartengeschoss</option><option value="1">Hauptgeschoss</option><option value="2">Wohngeschoss</option></select></div>
     <div id="view-buttons"><button id="outside" type="button">Außenansicht</button><button id="entrance" type="button">Eingang</button></div>
@@ -66,7 +66,7 @@
 <div id="model-license">Massive Eichen-Doppeltür · hell geölt</div>
 <div id="error" role="alert" hidden></div>
 <script type="module">
-  import('./src/main.js?v=20261119-v86-wandgestaltung').catch(showStartError);
+  import('./src/main.js?v=20261119-v87-treppenanschluss').catch(showStartError);
   function showStartError(error) {
     document.getElementById('status').textContent = 'Der Rundgang konnte nicht starten.';
     const details = document.getElementById('error');

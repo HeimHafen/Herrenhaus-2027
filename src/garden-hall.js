@@ -101,7 +101,7 @@ export function addManorWallFinish(THREE,group,base,spans) {
   addStonePanelling(THREE,group,base,spans,true);
 }
 
-export function buildGardenHall(THREE,group,level,walls,plaster,slabs,rooms) {
+export function buildGardenHall(THREE,group,level,walls,plaster,slabs,rooms,stairRecessEnd) {
   plaster.bumpMap=texture(THREE,'entry-finish/kalkputz-relief.jpg');
   plaster.bumpScale=.00065;
   plaster.color.setHex(0xe5d6c2);
@@ -112,7 +112,15 @@ export function buildGardenHall(THREE,group,level,walls,plaster,slabs,rooms) {
     bumpMap:texture(THREE,'wood/oak-2027-bump.jpg'),
     bumpScale:.0008,vertexColors:true,roughness:.55,clearcoat:.14,clearcoatRoughness:.49
   });
-  const stone=rooms.filter(room=>room.name==='Halle'||room.name==='Windfang');
+  const westStair=rooms.find(room=>room.name==='Haupttreppe');
+  const stone=rooms.flatMap(room=>{
+    if(room.name==='Halle')return [room];
+    if(room.name!=='Windfang')return [];
+    return [
+      {...room,x1:westStair.x1,z2:stairRecessEnd},
+      {...room,z1:stairRecessEnd}
+    ];
+  });
   const [slab]=slabs;
   const {width,depth}=slab.geometry.parameters;
   const {x,z}=slab.position;
