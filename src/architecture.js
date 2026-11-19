@@ -1,6 +1,6 @@
 import {addStairNiche} from "./stair-niche.js?v=89";
 import { WEST_CORE } from './stair-layout.js?v=76';
-import { addManorWallFinish, buildGardenHall } from './garden-hall.js?v=87';
+import { addStonePanelling, buildGardenHall } from './garden-hall.js?v=87';
 import { WEST_STAIR } from './stair-navigation.js?v=76';
 import { buildManorPlan } from './manor-plan.js?v=84';
 import { portalLintelY } from './north-portal.js?v=29';
@@ -344,9 +344,12 @@ export function buildEmptyInterior(THREE, scene) {
   const capWidth=undersideEdge-.17-wallLeft;
   finishBox(railStone,wallLeft+capWidth/2,shoulder+.023,wallZ,
     capWidth,.046,.19,-1,false,'Westtreppe_Steinabdeckung');
-  addManorWallFinish(THREE,structure,garden.floor+.046,[
-    {x:wallX,z:wallFront,length:wallWidth,alongX:true,side:-1,top:shoulder}
-  ]);
+  const recessWallStart=1.09+.085;
+  addStonePanelling(THREE,structure,garden.floor+.046,[
+    {x:wallX,z:wallFront,length:wallWidth,alongX:true,side:-1},
+    {x:WEST_CORE.right-.085,z:(recessWallStart+wallFront)/2,
+      length:wallFront-recessWallStart,alongX:false,side:-1}
+  ],true);
   buildGardenHall(THREE,structure,garden,hallWalls,plaster,gardenSlabs,gardenRooms,wallFront);
   addStairNiche(THREE,structure,walls[0],{left:wallLeft,right:wallRight,wallFace:wallFront,floor:garden.floor+.046});
 
@@ -435,9 +438,10 @@ export function buildEmptyInterior(THREE, scene) {
       picture.rotation.y=Math.PI/2;
       structure.add(picture);
     }
-    const light=new THREE.PointLight(0xffead5,17,6,2);
-    light.position.set(well.center,y+1.92,2.75);structure.add(light);
-    const galleryLight=new THREE.PointLight(0xffead5,11,5.3,2);
+    const ground=lev===garden;
+    const light=new THREE.PointLight(0xffead5,ground?5:17,6,2);
+    light.position.set(ground?wallX:well.center,y+(ground?2.32:1.92),ground?1.72:2.75);structure.add(light);
+    const galleryLight=new THREE.PointLight(0xffead5,ground?3.5:11,5.3,2);
     galleryLight.position.set(well.center,y+1.93,6.20);structure.add(galleryLight);
   }
   const east=wells.find(w=>w.center>0);

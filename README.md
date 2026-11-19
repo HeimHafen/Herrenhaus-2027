@@ -1,4 +1,8 @@
-# Herrenhaus 2027 · V89
+# Herrenhaus 2027 · V90
+
+## V90 · Licht und Wandanschlüsse in der Treppennische
+
+Zwei gedimmte Lichtquellen beleuchten die Haupttreppe im Gartengeschoss. Die Rückwand ist durchgehend verputzt. Die Vertäfelung läuft um die Ecke weiter.
 
 ## V89 · Eingerichtete Treppennische
 
