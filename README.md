@@ -1,4 +1,8 @@
-# Herrenhaus 2027 · V84
+# Herrenhaus 2027 · V85
+
+## V85 · Eingang, Windfang und Halle
+
+Historische Steinplatten mit dunklen Einlegern laufen auf einem gemeinsamen Raster durch Eingang, Windfang und Halle. Der Portalanschluss erhält geschlossene Laibungen und eine bündig eingepasste Deckenuntersicht.
 
 ## V84 · Neuer Grundriss
 

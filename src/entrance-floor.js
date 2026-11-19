@@ -1,44 +1,27 @@
-// Herrenhaus 2027 V19 – original photogrammetry stone MATERIAL localized in entrance only.
-// Source: Entrance Floor Tiles by Vasilis Haroupas (user-supplied GLB).
-// The original 59 MB scan also contains stairs and wall fragments; those are
-// deliberately NOT imported into a separate functioning hallway.
-// No other floor, stairs, architecture or collision is modified.
-export function buildEntranceFloor(THREE, scene, renderer) {
-  const width = 2.92;
-  // Finish extends right to the oak threshold at z=12.34. No former 27 cm
-  // unfinished apron behind the doors; the rest of the building stays bare.
-  const depth = 4.32;
-  const nearDoorZ = 12.34;
-  const farEndZ = nearDoorZ - depth;
-  const slabTop = .89 + .018 + .025;
-  const finishOffset = .004;
-  const loader = new THREE.TextureLoader();
-  const path = './assets/entrance-floor/';
-  const texture = loader.load(path + 'historische-eingangsfliesen.jpg', undefined,
-    undefined, error => console.error('Fliesen-Textur nicht geladen:', error));
-  const relief = loader.load(path + 'historische-eingangsfliesen-bump.jpg', undefined,
-    undefined, error => console.error('Fliesen-Relief nicht geladen:', error));
-  const roughnessMap=loader.load('./assets/entry-finish/fliesen-rauheit-v38.jpg');
-  roughnessMap.anisotropy=Math.min(renderer.capabilities.getMaxAnisotropy(),8);
-  const contactMap=loader.load('./assets/entry-finish/fliesen-kontaktschatten-v39.png');
-  texture.colorSpace = THREE.SRGBColorSpace;
-  for (const tex of [texture, relief]) {
-    tex.wrapS = THREE.ClampToEdgeWrapping;
-    tex.wrapT = THREE.ClampToEdgeWrapping;
-    tex.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 8);
+// The original scanned stone pattern is tiled on one world-aligned grid.
+export function buildEntranceFloor(THREE, group, y, regions, threshold) {
+  const loader=new THREE.TextureLoader();
+  const load=(name,color=false)=>{
+    const map=loader.load('./assets/entrance-floor/'+name);
+    map.wrapS=map.wrapT=THREE.RepeatWrapping;
+    map.anisotropy=8;
+    if(color)map.colorSpace=THREE.SRGBColorSpace;
+    return map;
+  };
+  const material=new THREE.MeshPhysicalMaterial({
+    color:0xf3e6d2,map:load('historische-fliesen-raster.jpg',true),
+    bumpMap:load('historische-fliesen-raster-bump.jpg'),bumpScale:.006,
+    roughness:.89,clearcoat:.18,clearcoatRoughness:.46
+  });
+  for(const {x1,x2,z1,z2} of [...regions,threshold]){
+    const geometry=new THREE.PlaneGeometry(x2-x1,z2-z1);
+    geometry.rotateX(-Math.PI/2);
+    geometry.translate((x1+x2)/2,y,(z1+z2)/2);
+    const p=geometry.attributes.position,uv=geometry.attributes.uv;
+    for(let i=0;i<p.count;i++)uv.setXY(i,p.getX(i)/2.10,-p.getZ(i)/3.36);
+    const mesh=new THREE.Mesh(geometry,material);
+    mesh.name='Historische_Steinplatten';
+    mesh.receiveShadow=true;
+    group.add(mesh);
   }
-  const floor = new THREE.Mesh(new THREE.PlaneGeometry(width, depth),
-    new THREE.MeshPhysicalMaterial({
-      name: 'V19_Eingangsflur_Originalfotogrammetrie_Naturstein',
-      color: 0xf3e6d2, map: texture, bumpMap: relief, bumpScale: 0.006,
-      aoMap:contactMap, aoMapIntensity:.88, roughness: 1, roughnessMap, clearcoat: .23, clearcoatRoughness: .46, metalness: 0, side: THREE.FrontSide, depthWrite: true
-    })
-  );
-  floor.name = 'V19_NUR_Eingangsflur_Echte_Steinmaterialien';
-  floor.rotation.x = -Math.PI / 2;
-  floor.position.set(0, slabTop + finishOffset, (nearDoorZ + farEndZ) / 2);
-  floor.receiveShadow = true;
-  floor.castShadow = false;
-  scene.add(floor);
-  return floor;
 }

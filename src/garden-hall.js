@@ -1,3 +1,4 @@
+import { buildEntranceFloor } from './entrance-floor.js?v=85';
 import { addOakParquet } from './parquet.js?v=83';
 import { HALL_NORTH, northOpenings } from './manor-plan.js?v=84';
 
@@ -84,7 +85,27 @@ export function buildGardenHall(THREE,group,level,walls,plaster,slabs,rooms) {
     bumpMap:texture(THREE,'wood/oak-2027-bump.jpg'),
     bumpScale:.0008,vertexColors:true,roughness:.55,clearcoat:.14,clearcoatRoughness:.49
   });
-  for(const slab of slabs)addOakParquet(THREE,group,slab,floor,oak);
+  const stone=rooms.filter(room=>room.name==='Halle'||room.name==='Windfang');
+  const [slab]=slabs;
+  const {width,depth}=slab.geometry.parameters;
+  const {x,z}=slab.position;
+  const south=z-depth/2,north=z+depth/2;
+  const breaks=[south,...new Set(stone.flatMap(room=>[room.z1,room.z2]).filter(edge=>edge>south&&edge<north)),north]
+    .sort((a,b)=>a-b);
+  const stoneRegions=[];
+  for(let i=1;i<breaks.length;i++){
+    const z1=breaks[i-1],z2=breaks[i];
+    const band=stone.find(room=>room.z1<=(z1+z2)/2&&room.z2>=(z1+z2)/2);
+    const plank=(a,b)=>addOakParquet(THREE,group,{
+      geometry:{parameters:{width:b-a,depth:z2-z1}},position:{x:(a+b)/2,z:(z1+z2)/2}
+    },floor,oak);
+    if(band){
+      stoneRegions.push({...band,z1,z2});
+      plank(x-width/2,band.x1);
+      plank(band.x2,x+width/2);
+    }else plank(x-width/2,x+width/2);
+  }
+  buildEntranceFloor(THREE,group,floor,stoneRegions,{x1:-1.56,x2:1.56,z1:north,z2:12.34});
   for(const x of [-15,-6,0,7,16]){
     const bounce=new THREE.PointLight(0xfff2e4,7.5,8,2);
     bounce.position.set(x,level.floor+2.25,-.75);
@@ -114,11 +135,9 @@ export function buildGardenHall(THREE,group,level,walls,plaster,slabs,rooms) {
       const px=x+(alongX?0:side*.10), pz=z+(alongX?side*.10:0);
       const room=rooms.find(({x1,x2,z1,z2})=>px>x1&&px<x2&&pz>z1&&pz<z2);
       if(!room||fittedRooms.has(room.name))continue;
-      // The short vestibule already carries its own fitted wall layers.
-      const limit=room.name==='Windfang'&&!alongX?6.37:Infinity;
       const length=alongX?width:depth;
       const begin=(alongX?x:z)-length/2;
-      const end=Math.min(begin+length,limit);
+      const end=begin+length;
       if(end<=begin)continue;
       const middle=(begin+end)/2;
       spans.push({x:alongX?middle:x+side*.085,z:alongX?z+side*.085:middle,

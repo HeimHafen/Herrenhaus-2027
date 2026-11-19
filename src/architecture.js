@@ -1,5 +1,5 @@
 import { WEST_CORE } from './stair-layout.js?v=76';
-import { addStonePanelling, buildGardenHall } from './garden-hall.js?v=84';
+import { addStonePanelling, buildGardenHall } from './garden-hall.js?v=85';
 import { WEST_STAIR } from './stair-navigation.js?v=76';
 import { buildManorPlan } from './manor-plan.js?v=84';
 import { portalLintelY } from './north-portal.js?v=29';
@@ -177,7 +177,7 @@ export function buildEmptyInterior(THREE, scene) {
       const bay=ENTRY_WINDOW_BAYS.find(b=>Math.sign(b.x)===side);
       const openings=northAxesForFloor(0).filter(x=>Math.sign(x)===side&&x!==bay.x)
         .map(x=>({x,start:x-NORTH_OPENING_WIDTH/2,end:x+NORTH_OPENING_WIDTH/2}));
-      openings.push({start:bay.left,end:bay.right});
+      openings.push({start:side<0?bay.left:1.935,end:side<0?-1.935:bay.right});
       for(const {x,start,end} of openings.sort((a,b)=>a.start-b.start)){
         box((edge+start)/2,(low+high)/2,northZ,start-edge,lowerH,.17,plaster,lev,true,'Nordwand_Pfeiler');
         if(x!==undefined){
@@ -237,7 +237,7 @@ export function buildEmptyInterior(THREE, scene) {
       color:0xf0ede6,roughness:.99,metalness:0,
       emissive:0xa8a39a,emissiveIntensity:.28,side:THREE.DoubleSide
     });
-    box(0,portalLintelY+.024,10.04,3.13,.022,4.23,entranceSoffit,-1,false,
+    box(0,portalLintelY+.011,10.10,2.94,.022,4.14,entranceSoffit,-1,false,
       'Rohbau_Eingangsgang_Glatte_Untersicht');
 
     // The perimeter meets the top of the walls; no visible horizontal gap.

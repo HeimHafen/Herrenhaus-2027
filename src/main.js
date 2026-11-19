@@ -2,7 +2,7 @@ import { STAIR_HALL_VIEW } from './stair-layout.js?v=78';
 import { buildPrivateCinema } from './private-cinema.js?v=84';
 import { SOUTH_GARDEN_TREES } from './south-garden.js?v=62';
 import { SOUTH_TERRACE } from './south-portico.js?v=60';
-import { buildEntryFinish } from './entry-finish.js?v=83';
+import { buildEntryFinish } from './entry-finish.js?v=85';
 import { ENTRY_WINDOW_BAYS, ENTRY_WINDOW_INNER_FACE } from './window-layout.js?v=33';
 import { buildNorthWindowWall } from './north-window-wall.js?v=33';
 import { cladStructuralExterior } from './exterior-skin.js?v=20261118-v11';
@@ -12,8 +12,7 @@ import { buildFacade } from './facade.js?v=60';
 import { addEntranceLamps } from './entrance-lamps.js?v=81';
 import { buildOakEntrance } from './oak-door.js?v=20261119-v39-deckfalz';
 import { buildSky } from './sky-atmosphere.js?v=20261118-stone-v14';
-import { buildEmptyInterior } from './architecture.js?v=84';
-import { buildEntranceFloor } from './entrance-floor.js?v=39';
+import { buildEmptyInterior } from './architecture.js?v=85';
 import { loadGardenMaple } from './garden-maple.js?v=62';
 import { buildGrounds } from './landscape.js?v=62';
 import { stairSurface, inStairwell, beginStair, finishedStair } from './stair-navigation.js?v=76';
@@ -232,7 +231,6 @@ async function run() {
   const cinema=buildPrivateCinema(scene,cinemaRoom,levels[0],walls[0]);
   // Sole finishing exception to the V16 plain interior: the short, north
   // entrance corridor directly behind the automatic double entrance door.
-  buildEntranceFloor(THREE, scene, renderer);
   buildEntryFinish(THREE,scene);
 
   // V9: physically align outdoor stone skin to each real structural wall span.
