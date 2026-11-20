@@ -1,20 +1,21 @@
-import { STAIR_HALL_VIEW } from './stair-layout.js?v=96';
+import { STAIR_HALL_VIEW } from './stair-layout.js?v=78';
 import { buildPrivateCinema } from './private-cinema.js?v=84';
 import { SOUTH_GARDEN_TREES } from './south-garden.js?v=62';
-import { SOUTH_TERRACE, SOUTH_BALCONY } from './south-portico.js?v=96';
-import { buildEntryFinish } from './entry-finish.js?v=96';
-import { buildNorthWindowWall } from './north-window-wall.js?v=96';
+import { SOUTH_TERRACE, SOUTH_BALCONY } from './south-portico.js?v=97';
+import { buildEntryFinish } from './entry-finish.js?v=93';
+import { ENTRY_WINDOW_BAYS, ENTRY_WINDOW_INNER_FACE } from './window-layout.js?v=97';
+import { buildNorthWindowWall } from './north-window-wall.js?v=97';
 import { cladStructuralExterior } from './exterior-skin.js?v=20261118-v11';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { buildFacade } from './facade.js?v=96';
-import { buildPorticoLantern } from './portico-lantern.js?v=96';
+import { buildFacade } from './facade.js?v=97';
+import { buildPorticoLantern } from './portico-lantern.js?v=97';
 import { buildOakEntrance } from './oak-door.js?v=20261119-v39-deckfalz';
 import { buildSky } from './sky-atmosphere.js?v=20261118-stone-v14';
-import { buildEmptyInterior } from './architecture.js?v=96';
+import { buildEmptyInterior } from './architecture.js?v=97';
 import { loadGardenMaple } from './garden-maple.js?v=62';
 import { buildGrounds } from './landscape.js?v=62';
-import { stairSurface, inStairwell, beginStair, finishedStair } from './stair-navigation.js?v=96';
+import { stairSurface, inStairwell, beginStair, finishedStair } from './stair-navigation.js?v=76';
 
 const status = document.getElementById('status');
 const floorSelect = document.getElementById('floor-select');
@@ -245,11 +246,7 @@ async function run() {
     instanceStaticBoxes(leaf);
     instanceStaticCylinders(leaf);
   }
-  const mirrored=structure.getObjectByName('Westtreppe_Gespiegelte_Laeufe');
-  instanceStaticBoxes(mirrored);
-  instanceStaticCylinders(mirrored);
   instanceStaticBoxes(structure);
-  instanceStaticCylinders(structure);
 
   // Reproducible start camera for viewing the new straight Ionic south portico.
   // Append ?view=south to the GitHub Pages URL; it changes only the start camera.
@@ -316,7 +313,11 @@ async function run() {
     if(floor===0&&!activeStair){
       if(northColumnBases.some(base=>
         x>base.min.x-radius&&x<base.max.x+radius&&z>base.min.z-radius&&z<base.max.z+radius))return false;
-      if(z<12.18&&z>7.88&&Math.abs(x)>1.32&&Math.abs(x)<23.64)return false;
+      if(z<12.18&&z>7.88&&Math.abs(x)>1.32&&Math.abs(x)<23.64){
+        const inBay=z<=ENTRY_WINDOW_INNER_FACE-radius&&ENTRY_WINDOW_BAYS.some(b=>
+          x>b.left+radius&&x<b.right-radius);
+        if(!inBay)return false;
+      }
       if(Math.abs(z-thresholdZ)<1.7 && Math.abs(x)<1.8){
         if(z>12.03&&z<12.40&&Math.abs(x)>1.12&&Math.abs(x)<1.56)return false;
         for(const leaf of door.userData.leaves){
@@ -384,7 +385,8 @@ async function run() {
       setStatus(`Herrenhaus · ${activeStair.well} · Treppe`);
     }else{
       const rooms=[gardenRooms,stateFloorRooms,secondFloorRooms][floor];
-      const roomZ=pos.z;
+      const roomZ=floor===0&&ENTRY_WINDOW_BAYS.some(b=>pos.x>b.left&&pos.x<b.right)
+        ?Math.min(pos.z,7.94):pos.z;
       const room=isInside(pos.x,pos.z)
         ?rooms.find(r=>pos.x>=r.x1&&pos.x<=r.x2&&roomZ>=r.z1&&roomZ<=r.z2)
         :null;

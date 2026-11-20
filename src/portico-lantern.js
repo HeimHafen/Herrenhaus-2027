@@ -1,7 +1,7 @@
 export function buildPorticoLantern(THREE,exterior){
   const fixture=new THREE.Group();
   fixture.name='Nordportikus_Bronze_Pendellaterne';
-  fixture.position.set(0,9.83,15.2);
+  fixture.position.set(0,8.72,15.2);
   exterior.add(fixture);
 
   const bronze=new THREE.MeshStandardMaterial({color:0x5c4028,roughness:.37,metalness:.72});
@@ -57,8 +57,8 @@ export function buildPorticoLantern(THREE,exterior){
   }
   profile(.3,.68,.038,.032,bronze,12);
 
-  // Rosette seats against the underside of the original portico.
-  const top=12.35-fixture.position.y;
+  // Seat the canopy on the exposed soffit, below the pediment structure.
+  const top=11.42-fixture.position.y;
   for(let y=2.055,index=0;y<top-.045;y+=.082,index++){
     const link=mesh(new THREE.TorusGeometry(.054,.012,8,16),bronze,0,y,0);
     link.rotation.y=index%2*Math.PI/2;
@@ -66,8 +66,8 @@ export function buildPorticoLantern(THREE,exterior){
   }
   profile(top-.065,top+.018,.135,.245,bronze,24);
   profile(top-.014,top+.022,.253,.253,trim,24);
-  const light=new THREE.PointLight(0xffcd8a,42,11,2);
-  light.position.y=.95;
+  const light=new THREE.PointLight(0xffd3a0,16,8,2);
+  light.position.y=.83;
   fixture.add(light);
   return fixture;
 }

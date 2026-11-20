@@ -1,4 +1,4 @@
-import { addManorWallFinish } from './garden-hall.js?v=96';
+import { addManorWallFinish } from './garden-hall.js?v=93';
 import { portalLintelY } from './north-portal.js?v=29';
 
 export function buildEntryFinish(THREE,scene){

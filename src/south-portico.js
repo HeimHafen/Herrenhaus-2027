@@ -71,6 +71,21 @@ export function buildSouthPortico(THREE, exterior, originalModel, mats) {
   const soffitBottom=13.554, panelDepth=.021, joint=.014;
   const soffitFront=-17.11, soffitBack=-11.93, soffitHalf=11.125;
   box('Suedportikus_Dachplatte',0,13.637,-14.52,soffitHalf*2,.13,soffitBack-soffitFront,soffit);
+  const spotTrim=new THREE.MeshStandardMaterial({color:0x7c674c,metalness:.55,roughness:.46});
+  const spotLens=new THREE.MeshBasicMaterial({color:0xffdda9});
+  // One recessed downlight in each bay between adjacent columns.
+  for(let i=1;i<columnAxes.length;i++){
+    const x=(columnAxes[i-1]+columnAxes[i])/2,z=-15.72;
+    mesh('Suedportikus_Strahler_Fassung',new THREE.CylinderGeometry(.105,.105,.035,24),
+      x,soffitBottom-.012,z,spotTrim);
+    mesh('Suedportikus_Strahler_Linse',new THREE.CylinderGeometry(.082,.082,.009,24),
+      x,soffitBottom-.034,z,spotLens);
+    const spot=new THREE.SpotLight(0xffd2a0,100,15,.40,.70,2);
+    spot.name='Suedportikus_Strahler_Warmweiss';
+    spot.position.set(x,soffitBottom-.046,z);
+    spot.target.position.set(x,4.4,-13.40);
+    group.add(spot,spot.target);
+  }
   const border=.15;
   const panelY=soffitBottom+panelDepth/2;
   const xEdges=[-soffitHalf+border,...columnAxes,soffitHalf-border];

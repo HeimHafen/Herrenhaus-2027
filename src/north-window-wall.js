@@ -1,4 +1,4 @@
-import { WINDOW_STOREYS, buildNorthWallBand, northOpeningsForBand, STAIR_WINDOWS } from './window-layout.js?v=96';
+import { WINDOW_STOREYS, NORTH_OPENING_WIDTH, northAxesForFloor, openingHeight, ENTRY_WINDOW_BAYS, ENTRY_WINDOW_INNER_FACE } from './window-layout.js?v=97';
 import { portalLintelY } from './north-portal.js?v=29';
 
 // Replace the solid imported north blocks with masonry around real apertures.
@@ -11,11 +11,25 @@ export function buildNorthWindowWall(THREE, target, material) {
     mesh.castShadow=mesh.receiveShadow=true;
     target.add(mesh);
   }
+  function piece(x1,x2,y1,y2,floor){
+    let edge=x1;
+    if(floor===0){
+      for(const {left,right} of ENTRY_WINDOW_BAYS){
+        const start=Math.max(x1,left),end=Math.min(x2,right);
+        if(end<=start)continue;
+        masonry(edge,start,y1,y2,8);
+        masonry(start,end,y1,y2,ENTRY_WINDOW_INNER_FACE);
+        edge=end;
+      }
+    }
+    masonry(edge,x2,y1,y2,8);
+  }
   const reveal=new THREE.MeshStandardMaterial({
     color:0xe6dac7,roughness:.92,emissive:0x544939,emissiveIntensity:.18
   });
-  function lineWindow(x,bottom,top,width){
-    const start=7.94,end=11.96,depth=end-start;
+  function lineWindow(x,bottom,top,start){
+    const end=11.91, depth=end-start;
+    const width=NORTH_OPENING_WIDTH;
     function lining(name,w,h,px,py){
       const mesh=new THREE.Mesh(new THREE.BoxGeometry(w,h,depth),reveal);
       mesh.name=name;
@@ -29,15 +43,24 @@ export function buildNorthWindowWall(THREE, target, material) {
     lining('Nordfenster_Heller_Sturz',width,.027,x,top+.005);
     lining('Nordfenster_Helle_Sohlbank',width,.036,x,bottom-.008);
   }
-  for(const {floor} of WINDOW_STOREYS){
+  for(const {floor,y} of WINDOW_STOREYS) {
     const low=[0,5.16,10.33][floor],high=[5.16,10.33,14][floor];
-    const portal={x:0,width:2.68,bottom:.89,top:portalLintelY};
-    buildNorthWallBand(floor,low,high,-23.5,23.5,portal,(a,b,bottom,top)=>{
-      masonry(a,b,bottom,top,8);
-    });
-    for(const {x,bottom,top,width,stage} of northOpeningsForBand(floor,low,high)){
-      if(stage===undefined)lineWindow(x,bottom,top,width);
+    const h=openingHeight(floor,'north');
+    const openings=northAxesForFloor(floor).map(x=>({
+      x,r:NORTH_OPENING_WIDTH/2,bottom:y-h/2,top:y+h/2
+    }));
+    if(floor===0)openings.push({x:0,r:1.34,bottom:.89,top:portalLintelY});
+    let edge=-23.5;
+    for(const {x,r,bottom,top} of openings.sort((a,b)=>a.x-b.x)){
+      piece(edge,x-r,low,high,floor);
+      piece(x-r,x+r,low,bottom,floor);
+      piece(x-r,x+r,top,high,floor);
+      if(floor!==0||x!==0){
+        const bay=floor===0&&ENTRY_WINDOW_BAYS.find(entry=>entry.x===x);
+        lineWindow(x,bottom,top,bay?ENTRY_WINDOW_INNER_FACE:8);
+      }
+      edge=x+r;
     }
+    piece(edge,23.5,low,high,floor);
   }
-  for(const {x,bottom,top,width} of STAIR_WINDOWS)lineWindow(x,bottom,top,width);
 }

@@ -1,5 +1,5 @@
 import { WINDOW_STOREYS, SIDE_WINDOW_AXES, SOUTH_WINDOW_AXES, southOpening,
-  STAIR_WINDOWS, northAxesForFloor, NORTH_OPENING_WIDTH, SIDE_OPENING_WIDTH, openingHeight } from './window-layout.js?v=96';
+  northAxesForFloor, NORTH_OPENING_WIDTH, SIDE_OPENING_WIDTH, openingHeight } from './window-layout.js?v=97';
 
 export function buildLandgutWindows(THREE, exterior, mats, glass, {studyPreview=false}={}){
   const group=new THREE.Group();
@@ -100,9 +100,6 @@ export function buildLandgutWindows(THREE, exterior, mats, glass, {studyPreview=
     for(const side of [-1,1])for(const z of SIDE_WINDOW_AXES){
       window(side<0?'West':'Ost',floor,side*23.43,y,z,SIDE_OPENING_WIDTH,openingHeight(floor,'side'),-side*Math.PI/2);
     }
-  }
-  for(const {x,bottom,top,width,stage} of STAIR_WINDOWS){
-    window('Nord_Treppenpodest',stage,x,(bottom+top)/2,12,width,top-bottom,Math.PI);
   }
   group.userData.openings=openings;
   return group;

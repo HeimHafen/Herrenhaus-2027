@@ -1,16 +1,15 @@
-import { STAIR_CORES, STAIR_ENTRY } from './stair-layout.js?v=96';
+import { WEST_CORE } from './stair-layout.js?v=76';
 
 const west=-23.15, east=23.15, south=-11.79, north=7.95;
 export const HALL_NORTH=1.09;
 const wingSouth=-2.25, hallSouth=-4.20;
 const hallHalfWidth=11.95;
-const [westStair,eastStair]=STAIR_CORES;
-const northEdges=[west,-17.5,-12.5,westStair.left,westStair.right,eastStair.left,eastStair.right,12.5,17.5,east];
+const northEdges=[west,-17.5,-12.5,WEST_CORE.left,WEST_CORE.right,1.85,6.55,11.95,17.5,east];
 const southEdges=[west,-17.5,-7.5,7.5,17.5,east];
 const northNames=[
-  ['Garderobe und Gäste-WC','Hauswirtschaft','Teeküche','Westtreppe','Windfang','Osttreppe','Kaminzimmer','Spielzimmer','Werkraum'],
-  ['Vorrat und Wäsche','Spülküche','Anrichte','Westtreppe','Fensternische','Osttreppe','Teesalon','Gästezimmer','Gästebad'],
-  ['Familienbad','Wäsche','Ankleide','Westtreppe','Bücher und Wäsche','Osttreppe','Schrankraum','Kinderzimmer Ost','Duschbad']
+  ['Garderobe und Gäste-WC','Hauswirtschaft','Teeküche','Haupttreppe','Windfang','Kaminzimmer','Nebentreppe','Spielzimmer','Werkraum'],
+  ['Vorrat und Wäsche','Spülküche','Anrichte','Haupttreppe','Fensternische','Teesalon','Nebentreppe','Gästezimmer','Gästebad'],
+  ['Familienbad','Wäsche','Ankleide','Haupttreppe','Bücher und Wäsche','Schrankraum','Nebentreppe','Kinderzimmer Ost','Duschbad']
 ];
 const southNames=[
   ['Lager','Privatkino','Gartensalon','Bibliothek','Lesezimmer'],
@@ -20,8 +19,7 @@ const southNames=[
 const middle=(a,b)=>(a+b)/2;
 export const northOpenings=northNames.map((names,level)=>names.flatMap((_,i)=>{
   if(level===1&&i===8)return [];
-  if(level===0&&(i===3||i===5))return [];
-  const width=i===3||i===5?5.22:level===0&&i===4?2.75:1.22;
+  const width=i===3||i===6?5.22:level===0&&i===4?2.75:1.22;
   return [[middle(northEdges[i],northEdges[i+1]),width]];
 }));
 
@@ -36,8 +34,8 @@ export function buildManorPlan(THREE,{levels,box,horizontal,vertical,structure})
       const a=northEdges[i],b=northEdges[i+1];
       room(name,a,b,HALL_NORTH,north);
       if(i>0){
-        const doors=level===0&&(i===4||i===5)?[STAIR_ENTRY]:level===1&&i===8?[[4.9,1.18]]:[];
-        vertical(level,a,HALL_NORTH,north,doors);
+        const connecting=(level===0&&i===5)||(level===1&&i===8);
+        vertical(level,a,HALL_NORTH,north,connecting?[[4.9,1.18]]:[]);
       }
     }
     for(const [i,name] of southNames[level].entries()){
