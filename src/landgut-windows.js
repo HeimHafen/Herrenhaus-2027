@@ -1,5 +1,5 @@
 import { WINDOW_STOREYS, SIDE_WINDOW_AXES, SOUTH_WINDOW_AXES, southOpening,
-  northAxesForFloor, NORTH_OPENING_WIDTH, SIDE_OPENING_WIDTH, openingHeight } from './window-layout.js?v=94';
+  northAxesForFloor, NORTH_OPENING_WIDTH, SIDE_OPENING_WIDTH, openingHeight } from './window-layout.js?v=95';
 
 export function buildLandgutWindows(THREE, exterior, mats, glass, {studyPreview=false}={}){
   const group=new THREE.Group();
@@ -41,13 +41,13 @@ export function buildLandgutWindows(THREE, exterior, mats, glass, {studyPreview=
       box(name+'_Bronzegriff',side*.074,-.20,-.142,.021,.13,.036,iron);
   }
 
-  function gardenDoor({x,y,width,height}){
+  function gardenDoor({x,y,width,height},floor){
     const z=-11.96, frame=.058, leafWidth=width/2-frame;
     const door=new THREE.Group();
-    door.name='Automatische_Gartendoppeltuer';
+    door.name=floor===0?'Automatische_Gartendoppeltuer':'Automatische_Balkondoppeltuer';
     door.position.set(x,y,z);
     group.add(door);
-    openings.push({elevation:'Sued',floor:0,x,y,z,width,height,door:true});
+    openings.push({elevation:'Sued',floor,x,y,z,width,height,door:true});
 
     function piece(parent,name,w,h,d,px,py,pz,material=sash){
       const mesh=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),material);
@@ -84,13 +84,13 @@ export function buildLandgutWindows(THREE, exterior, mats, glass, {studyPreview=
       }
     }
     piece(door,'Zargensturz',width,.058,.18,0,(height-.058)/2,.01);
-    group.userData.gardenDoor={leaves,z,width};
+    group.userData[floor===0?'gardenDoor':'balconyDoor']={leaves,z,width,angle:0,occupied:false};
   }
 
   for(const {floor,y} of WINDOW_STOREYS){
     for(const axis of SOUTH_WINDOW_AXES){
       const south=southOpening(axis,floor);
-      if(floor===0&&axis===0)gardenDoor(south);
+      if(floor<2&&axis===0)gardenDoor(south,floor);
       else window('Sued',floor,south.x,south.y,-11.96,south.width,south.height,0,south.door);
     }
     for(const x of northAxesForFloor(floor)){

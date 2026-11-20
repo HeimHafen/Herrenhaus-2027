@@ -1,6 +1,6 @@
 import { buildEntranceFloor } from './entrance-floor.js?v=85';
 import { addOakParquet } from './parquet.js?v=83';
-import { HALL_NORTH, northOpenings } from './manor-plan.js?v=84';
+import { HALL_NORTH, northOpenings } from './manor-plan.js?v=95';
 
 function texture(THREE, file, color=false) {
   const map=new THREE.TextureLoader().load('./assets/'+file);

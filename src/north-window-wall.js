@@ -1,4 +1,4 @@
-import { WINDOW_STOREYS, NORTH_OPENING_WIDTH, northAxesForFloor, openingHeight, ENTRY_WINDOW_BAYS, ENTRY_WINDOW_INNER_FACE } from './window-layout.js?v=33';
+import { WINDOW_STOREYS, NORTH_OPENING_WIDTH, northAxesForFloor, openingHeight, ENTRY_WINDOW_BAYS, ENTRY_WINDOW_INNER_FACE } from './window-layout.js?v=95';
 import { portalLintelY } from './north-portal.js?v=29';
 
 // Replace the solid imported north blocks with masonry around real apertures.

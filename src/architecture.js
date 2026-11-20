@@ -1,10 +1,10 @@
 import {addStairNiche} from "./stair-niche.js?v=89";
 import { WEST_CORE } from './stair-layout.js?v=76';
-import { addOakPanelling, lightOakFinish, buildGardenHall } from './garden-hall.js?v=93';
+import { addOakPanelling, lightOakFinish, buildGardenHall } from './garden-hall.js?v=95';
 import { WEST_STAIR } from './stair-navigation.js?v=76';
-import { buildManorPlan } from './manor-plan.js?v=84';
+import { buildManorPlan } from './manor-plan.js?v=95';
 import { portalLintelY } from './north-portal.js?v=29';
-import { WINDOW_STOREYS, SIDE_WINDOW_AXES, SOUTH_WINDOW_AXES, SIDE_OPENING_WIDTH, NORTH_OPENING_WIDTH, northAxesForFloor, southOpening, openingHeight, ENTRY_WINDOW_BAYS, ENTRY_WINDOW_INNER_FACE } from './window-layout.js?v=94';
+import { WINDOW_STOREYS, SIDE_WINDOW_AXES, SOUTH_WINDOW_AXES, SIDE_OPENING_WIDTH, NORTH_OPENING_WIDTH, northAxesForFloor, southOpening, openingHeight, ENTRY_WINDOW_BAYS, ENTRY_WINDOW_INNER_FACE } from './window-layout.js?v=95';
 export function buildEmptyInterior(THREE, scene) {
   const plaster = new THREE.MeshStandardMaterial({color:0xeae9e5,roughness:.97});
   const floorStone = new THREE.MeshStandardMaterial({color:0xd0cfcb,roughness:.96});
@@ -143,7 +143,7 @@ export function buildEmptyInterior(THREE, scene) {
     // Südseite: Durchgehende öffentliche Außenfassade mit den bisherigen Fensterachsen.
     const southZ=-11.80, openings=SOUTH_WINDOW_AXES.map(axis=>{
       const {x,y,width,height}=southOpening(axis,level);
-      return [x-width/2,x+width/2,y-height/2,y+height/2,level===0&&axis===0];
+      return [x-width/2,x+width/2,y-height/2,y+height/2,level<2&&axis===0];
     });
     let prev=-23.15;
     for(const [a,b,bottom,top,gardenDoor] of openings){
@@ -152,6 +152,7 @@ export function buildEmptyInterior(THREE, scene) {
       if(hi>top)box((a+b)/2,(top+hi)/2,southZ,b-a,hi-top,.27,plaster,level,!gardenDoor,'Suedwand_Fenstersturz');
 
       finishOpening('x',southZ+.135,a,b,bottom,top,1,bottom>lo+.1);
+      if(gardenDoor)box((a+b)/2,lo+.012,-11.86,b-a,.024,.23,jamb,-1,false,'Gartentuer_Schwelle');
       prev=b;
     }
     if(prev<23.15)box((prev+23.15)/2,(lo+hi)/2,southZ,23.15-prev,ht,.27,plaster,level,true,'Suedwand_Pfeiler');
@@ -196,7 +197,7 @@ export function buildEmptyInterior(THREE, scene) {
       const bay=ENTRY_WINDOW_BAYS.find(b=>Math.sign(b.x)===side);
       const openings=northAxesForFloor(0).filter(x=>Math.sign(x)===side&&x!==bay.x)
         .map(x=>({x,start:x-NORTH_OPENING_WIDTH/2,end:x+NORTH_OPENING_WIDTH/2}));
-      openings.push({start:side<0?bay.left:1.935,end:side<0?-1.935:bay.right});
+      openings.push({start:bay.left,end:bay.right});
       for(const {x,start,end} of openings.sort((a,b)=>a.start-b.start)){
         box((edge+start)/2,(low+high)/2,northZ,start-edge,lowerH,.17,plaster,lev,true,'Nordwand_Pfeiler');
         if(x!==undefined){
@@ -219,22 +220,19 @@ export function buildEmptyInterior(THREE, scene) {
     }
     for(const {left,right,x} of ENTRY_WINDOW_BAYS){
       const front=ENTRY_WINDOW_INNER_FACE, back=7.875;
-      const a=x<0?left:1.935,b=x<0?-1.935:right;
+      const a=left,b=right;
       const width=b-a, depth=front-back, center=(a+b)/2;
       box(center,low+.018,(front+7.89)/2,width,.05,front-7.89,floorStone,-1,false,'Fensterzimmer_Boden');
       box(center,ceilingY,(front+back)/2,width,.055,depth,ceilingTrim,-1,false,'Fensterzimmer_Decke');
       for(const edge of [left,right]){
-        // Keep the entire inner return on the room side of its boundary.
-        // A centered 17 cm wall used to protrude into the west entry lining.
-        const innerEdge=x<0?right:left;
-        const wallX=edge===innerEdge?Math.sign(x)*1.85:edge;
+        const wallX=edge+(edge===left?-.085:.085);
         box(wallX,(low+high)/2,(front+back)/2,.17,lowerH,depth,plaster,lev,true,'Fensterzimmer_Ruecklauf');
       }
       const w=NORTH_OPENING_WIDTH, yc=(northBottom+northTop)/2;
       addOakPanelling(THREE,structure,low+.046,[
         {x:center,z:front,length:width,alongX:true,side:-1},
-        {x:(x<0?a+.085:a),z:(front+7.89)/2,length:front-7.89,alongX:false,side:1},
-        {x:(x<0?b:b-.085),z:(front+7.89)/2,length:front-7.89,alongX:false,side:-1}
+        {x:a,z:(front+7.89)/2,length:front-7.89,alongX:false,side:1},
+        {x:b,z:(front+7.89)/2,length:front-7.89,alongX:false,side:-1}
       ],true);
       box(x,northBottom-.028,front+.12,w+.16,.056,.48,jamb,-1,false,'Fensterzimmer_Fensterbank');
       for(const sign of [-1,1]){

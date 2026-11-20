@@ -1,6 +1,6 @@
 import { portalLintelY } from './north-portal.js?v=29';
-import { buildLandgutWindows } from './landgut-windows.js?v=94';
-import { buildSouthPortico } from './south-portico.js?v=60';
+import { buildLandgutWindows } from './landgut-windows.js?v=95';
+import { buildSouthPortico } from './south-portico.js?v=95';
 import { createExteriorMaterialLibrary } from './exterior-materials.js?v=55';
 import { buildExteriorDetails } from './exterior-details.js?v=56';
 import { buildHeritageOrnaments } from './heritage-ornaments.js?v=20261118-v25-clean-window-ornaments';

@@ -1,3 +1,5 @@
+export const SOUTH_BALCONY = Object.freeze({halfWidth:11.57, railZ:-16.145, deck:5.34});
+
 export const SOUTH_TERRACE = Object.freeze([
   { halfWidth:12.76, front:-18.20, top:.225 },
   { halfWidth:12.42, front:-17.85, top:.445 },
@@ -94,8 +96,8 @@ export function buildSouthPortico(THREE, exterior, originalModel, mats) {
 
   // The edge of the balcony enters the rear quadrant of every shaft.
   // The full-height columns remain visible in front of the balcony.
-  const half=11.57, deck=5.34, railTop=6.38;
-  const front=columnZ+.13, railZ=columnZ+.205;
+  const {halfWidth:half,deck,railZ}=SOUTH_BALCONY, railTop=6.38;
+  const front=columnZ+.13;
   const back=wall+.04;
   const deckWidth=half*2+.12, depth=back-front;
   // Use the same limestone as the elevation so the edge and underside read

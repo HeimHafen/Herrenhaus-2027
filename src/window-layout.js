@@ -28,15 +28,15 @@ export function openingHeight(floor, wall) {
 
 // Room returns for the two garden-level windows flanking the entrance.
 export const ENTRY_WINDOW_BAYS = Object.freeze([
-  Object.freeze({left:-5.72,right:-1.39,x:-4.65}),
-  Object.freeze({left:1.69,right:5.97,x:4.65})
+  Object.freeze({left:-5.97,right:-1.935,x:-4.65}),
+  Object.freeze({left:1.935,right:5.97,x:4.65})
 ]);
 export const ENTRY_WINDOW_INNER_FACE = 11.58;
 
 // Shared openings for the garden elevation and its real stone wall.
 export function southOpening(axis,floor) {
   const door=floor<2&&Math.abs(axis)<=5;
-  const mainGardenDoor=floor===0&&axis===0;
+  const mainGardenDoor=floor<2&&axis===0;
   const height=mainGardenDoor?3.55:floor===2?1.78:door?3.20:3.04;
   const y=door?(floor===0?.89:5.34)+.045+height/2:WINDOW_STOREYS[floor].y;
   return {x:axis,y,width:mainGardenDoor?2.45:floor===2?1.48:1.53,height,door};

@@ -3,6 +3,7 @@ import { WEST_CORE } from './stair-layout.js?v=76';
 const west=-23.15, east=23.15, south=-11.79, north=7.95;
 export const HALL_NORTH=1.09;
 const wingSouth=-2.25, hallSouth=-4.20;
+const hallHalfWidth=11.95;
 const northEdges=[west,-17.5,-12.5,WEST_CORE.left,WEST_CORE.right,1.85,6.55,11.95,17.5,east];
 const southEdges=[west,-17.5,-7.5,7.5,17.5,east];
 const northNames=[
@@ -41,21 +42,21 @@ export function buildManorPlan(THREE,{levels,box,horizontal,vertical,structure})
       const a=southEdges[i],b=southEdges[i+1];
       const top=i===2?hallSouth:wingSouth;
       room(name,a,b,south,top);
-      const width=i===2?2.8:level===0&&i===1?1.8:1.35;
+      const width=i===2?2.8:level===0&&(i===1||i===3)?1.8:1.35;
       horizontal(level,top,a,b,[[middle(a,b),width]]);
       if(i>0)vertical(level,a,south,wingSouth,level===1&&(i===1||i===3)?[[-7,1.85]]:[]);
     }
-    for(const x of [-7.5,11.95])vertical(level,x,wingSouth,HALL_NORTH,[[-.58,2.15]]);
-    room('Westflur',west,-7.5,wingSouth,HALL_NORTH);
-    room('Halle',-7.5,11.95,wingSouth,HALL_NORTH);
+    for(const x of [-hallHalfWidth,hallHalfWidth])vertical(level,x,wingSouth,HALL_NORTH,[[-.58,2.15]]);
+    room('Westflur',west,-hallHalfWidth,wingSouth,HALL_NORTH);
+    room('Halle',-hallHalfWidth,hallHalfWidth,wingSouth,HALL_NORTH);
     room('Halle',-7.5,7.5,hallSouth,wingSouth);
-    room('Ostflur',11.95,east,wingSouth,HALL_NORTH);
+    room('Ostflur',hallHalfWidth,east,wingSouth,HALL_NORTH);
     if(level===0)room('Eingang',-1.56,1.56,north,12.18);
     for(const x of [-22.76,22.76]){
       box(x,floor+.24,-1.05,.56,.40,1.62,wood,level,true,'Fensterbank_Sitzbank');
       box(x,floor+.46,-1.05,.53,.12,1.54,cushion,-1,false,'Fensterbank_Sitzpolster');
     }
-    for(const x of level===0?[]:[-17,-7,0,8,18]){
+    for(const x of level===0?[]:[-17,-8,0,8,17]){
       const light=new THREE.PointLight(0xffe1bd,10,9,2);
       light.position.set(x,floor+2.16,-.65);
       structure.add(light);

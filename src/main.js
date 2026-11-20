@@ -1,18 +1,18 @@
 import { STAIR_HALL_VIEW } from './stair-layout.js?v=78';
 import { buildPrivateCinema } from './private-cinema.js?v=84';
 import { SOUTH_GARDEN_TREES } from './south-garden.js?v=62';
-import { SOUTH_TERRACE } from './south-portico.js?v=60';
+import { SOUTH_TERRACE, SOUTH_BALCONY } from './south-portico.js?v=95';
 import { buildEntryFinish } from './entry-finish.js?v=93';
-import { ENTRY_WINDOW_BAYS, ENTRY_WINDOW_INNER_FACE } from './window-layout.js?v=33';
-import { buildNorthWindowWall } from './north-window-wall.js?v=93';
+import { ENTRY_WINDOW_BAYS, ENTRY_WINDOW_INNER_FACE } from './window-layout.js?v=95';
+import { buildNorthWindowWall } from './north-window-wall.js?v=95';
 import { cladStructuralExterior } from './exterior-skin.js?v=20261118-v11';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { buildFacade } from './facade.js?v=94';
+import { buildFacade } from './facade.js?v=95';
 import { addEntranceLamps } from './entrance-lamps.js?v=81';
 import { buildOakEntrance } from './oak-door.js?v=20261119-v39-deckfalz';
 import { buildSky } from './sky-atmosphere.js?v=20261118-stone-v14';
-import { buildEmptyInterior } from './architecture.js?v=94';
+import { buildEmptyInterior } from './architecture.js?v=95';
 import { loadGardenMaple } from './garden-maple.js?v=62';
 import { buildGrounds } from './landscape.js?v=62';
 import { stairSurface, inStairwell, beginStair, finishedStair } from './stair-navigation.js?v=76';
@@ -284,8 +284,8 @@ async function run() {
       yaw=hallView?gardenStart.yaw:westView?-Math.PI/2:eastView?Math.PI/2:southAngle?2.36:stairView?STAIR_HALL_VIEW.yaw:southView||basementView||salonView||vestibuleView?Math.PI:0,
       pitch=hallView?gardenStart.pitch:stairView?STAIR_HALL_VIEW.pitch:historicWindowPreview?.52:southAngle?.125:southView?.245:westView||eastView?.16:doorView?.02:.07, last=performance.now();
   let doorAngle=0, entranceOccupied=false;
-  let gardenAngle=0, gardenOccupied=false;
-  const gardenDoor=facadeWindows.userData.gardenDoor;
+  const {gardenDoor,balconyDoor}=facadeWindows.userData;
+  const southDoors=[gardenDoor,balconyDoor];
   const [leftLeaf,rightLeaf]=door.userData.leaves;
   const thresholdZ=leftLeaf.position.z;
   let foot=(stateView||stateHallView)?levels[1].floor:(hallView||cinemaView||stairView||entryView||vestibuleView||basementView||ovalView||salonView||doorView)?levels[0].floor:.02;
@@ -333,10 +333,18 @@ async function run() {
         }
       }
       if(z<7.88&&z> -11.90&&Math.abs(x)>23-radius&&Math.abs(x)<23.68)return false;
-      const span=gardenDoor.width/2-.058;
-      if(Math.abs(z-gardenDoor.z)<span+radius+.10&&Math.abs(x)<gardenDoor.width/2+radius+.10){
-        for(const leaf of gardenDoor.leaves){
-          const dx=x-leaf.position.x,dz=z-gardenDoor.z;
+    }else{
+      if(Math.abs(x)>23.0-radius||z>7.95)return false;
+      if(floor!==1&&z< -11.56+radius)return false;
+      if(floor===1&&z< -11.56&&
+        (Math.abs(x)>=SOUTH_BALCONY.halfWidth-radius||z<=SOUTH_BALCONY.railZ+radius+.15))return false;
+    }
+    if(!activeStair&&southDoors[floor]){
+      const southDoor=southDoors[floor];
+      const span=southDoor.width/2-.058;
+      if(Math.abs(z-southDoor.z)<span+radius+.10&&Math.abs(x)<southDoor.width/2+radius+.10){
+        for(const leaf of southDoor.leaves){
+          const dx=x-leaf.position.x,dz=z-southDoor.z;
           const c=Math.cos(leaf.rotation.y),s=Math.sin(leaf.rotation.y);
           const along=(c*dx-s*dz)*-Math.sign(leaf.position.x);
           const across=s*dx+c*dz;
@@ -344,11 +352,9 @@ async function run() {
         }
       }
       if(z< -11.56&&z> -12.19&&Math.abs(x)<23.60){
-        const clearHalf=gardenDoor.width/2-.058-radius-.08;
-        if(gardenAngle<1.43||Math.abs(x)>=clearHalf)return false;
+        const clearHalf=southDoor.width/2-.058-radius-.08;
+        if(southDoor.angle<1.43||Math.abs(x)>=clearHalf)return false;
       }
-    }else{
-      if(Math.abs(x)>23.0-radius||z< -11.56+radius||z>7.95)return false;
     }
     const candidate=proposedRoute||beginStair(stairs,floor,x,z);
     if(inStairwell(wells,x,z,floor)){
@@ -386,6 +392,10 @@ async function run() {
       const room=isInside(pos.x,pos.z)
         ?rooms.find(r=>pos.x>=r.x1&&pos.x<=r.x2&&roomZ>=r.z1&&roomZ<=r.z2)
         :null;
+      if(floor===1&&pos.z<=-12.19){
+        setStatus('Herrenhaus · Hauptgeschoss · Gartenbalkon');
+        return;
+      }
       setStatus((isInside(pos.x,pos.z)||!outside)
         ?`Herrenhaus · ${levels[floor].name} · ${room?room.name:'Rundgang'}`
         :'Herrenhaus · Außenansicht');
@@ -455,16 +465,17 @@ async function run() {
     if(doorAngle!==previousAngle)renderer.shadowMap.needsUpdate=true;
     leftLeaf.rotation.y=-doorAngle;
     rightLeaf.rotation.y=doorAngle;
-    const gardenDistance=Math.hypot(Math.max(0,Math.abs(pos.x)-gardenDoor.width/2)*1.7,pos.z-gardenDoor.z);
-    if(floor!==0)gardenOccupied=false;
-    else if(gardenDistance<2.9)gardenOccupied=true;
-    else if(gardenDistance>3.5)gardenOccupied=false;
-    const gardenGoal=gardenOccupied?1.52:0;
-    const nextGardenAngle=THREE.MathUtils.damp(gardenAngle,gardenGoal,6.5,dt);
-    if(nextGardenAngle!==gardenAngle){
-      gardenAngle=Math.abs(nextGardenAngle-gardenGoal)<.002?gardenGoal:nextGardenAngle;
-      gardenDoor.leaves[0].rotation.y=gardenAngle;
-      gardenDoor.leaves[1].rotation.y=-gardenAngle;
+    for(const [level,southDoor] of southDoors.entries()){
+      const distance=Math.hypot(Math.max(0,Math.abs(pos.x)-southDoor.width/2)*1.7,pos.z-southDoor.z);
+      if(floor!==level||activeStair||distance>3.5)southDoor.occupied=false;
+      else if(distance<2.9)southDoor.occupied=true;
+      const goal=southDoor.occupied?1.52:0;
+      const angle=THREE.MathUtils.damp(southDoor.angle,goal,6.5,dt);
+      const nextAngle=Math.abs(angle-goal)<.002?goal:angle;
+      if(nextAngle===southDoor.angle)continue;
+      southDoor.angle=nextAngle;
+      southDoor.leaves[0].rotation.y=nextAngle;
+      southDoor.leaves[1].rotation.y=-nextAngle;
       renderer.shadowMap.needsUpdate=true;
     }
     const forward=Number(pressed('w','arrowup'))-Number(pressed('s','arrowdown'));
