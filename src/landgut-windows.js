@@ -1,5 +1,5 @@
 import { WINDOW_STOREYS, SIDE_WINDOW_AXES, SOUTH_WINDOW_AXES, southOpening,
-  northAxesForFloor, NORTH_OPENING_WIDTH, SIDE_OPENING_WIDTH, openingHeight } from './window-layout.js?v=54';
+  northAxesForFloor, NORTH_OPENING_WIDTH, SIDE_OPENING_WIDTH, openingHeight } from './window-layout.js?v=94';
 
 export function buildLandgutWindows(THREE, exterior, mats, glass, {studyPreview=false}={}){
   const group=new THREE.Group();

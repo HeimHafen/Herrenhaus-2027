@@ -1,4 +1,8 @@
-# Herrenhaus 2027 · V93
+# Herrenhaus 2027 · V94
+
+## V94 · Größere Gartentür
+
+Das mittlere Element misst 2,45 × 3,55 m. Die Wandöffnung, beide Flügel und deren Kollisionsbereiche sind darauf abgestimmt.
 
 ## V93 · Helle Eiche und Raumanschlüsse
 

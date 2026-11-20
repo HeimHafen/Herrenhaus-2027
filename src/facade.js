@@ -1,5 +1,5 @@
 import { portalLintelY } from './north-portal.js?v=29';
-import { buildLandgutWindows } from './landgut-windows.js?v=92';
+import { buildLandgutWindows } from './landgut-windows.js?v=94';
 import { buildSouthPortico } from './south-portico.js?v=60';
 import { createExteriorMaterialLibrary } from './exterior-materials.js?v=55';
 import { buildExteriorDetails } from './exterior-details.js?v=56';

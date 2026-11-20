@@ -4,7 +4,7 @@ import { addOakPanelling, lightOakFinish, buildGardenHall } from './garden-hall.
 import { WEST_STAIR } from './stair-navigation.js?v=76';
 import { buildManorPlan } from './manor-plan.js?v=84';
 import { portalLintelY } from './north-portal.js?v=29';
-import { WINDOW_STOREYS, SIDE_WINDOW_AXES, SOUTH_WINDOW_AXES, SIDE_OPENING_WIDTH, NORTH_OPENING_WIDTH, northAxesForFloor, southOpening, openingHeight, ENTRY_WINDOW_BAYS, ENTRY_WINDOW_INNER_FACE } from './window-layout.js?v=54';
+import { WINDOW_STOREYS, SIDE_WINDOW_AXES, SOUTH_WINDOW_AXES, SIDE_OPENING_WIDTH, NORTH_OPENING_WIDTH, northAxesForFloor, southOpening, openingHeight, ENTRY_WINDOW_BAYS, ENTRY_WINDOW_INNER_FACE } from './window-layout.js?v=94';
 export function buildEmptyInterior(THREE, scene) {
   const plaster = new THREE.MeshStandardMaterial({color:0xeae9e5,roughness:.97});
   const floorStone = new THREE.MeshStandardMaterial({color:0xd0cfcb,roughness:.96});

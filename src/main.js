@@ -8,11 +8,11 @@ import { buildNorthWindowWall } from './north-window-wall.js?v=93';
 import { cladStructuralExterior } from './exterior-skin.js?v=20261118-v11';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { buildFacade } from './facade.js?v=92';
+import { buildFacade } from './facade.js?v=94';
 import { addEntranceLamps } from './entrance-lamps.js?v=81';
 import { buildOakEntrance } from './oak-door.js?v=20261119-v39-deckfalz';
 import { buildSky } from './sky-atmosphere.js?v=20261118-stone-v14';
-import { buildEmptyInterior } from './architecture.js?v=93';
+import { buildEmptyInterior } from './architecture.js?v=94';
 import { loadGardenMaple } from './garden-maple.js?v=62';
 import { buildGrounds } from './landscape.js?v=62';
 import { stairSurface, inStairwell, beginStair, finishedStair } from './stair-navigation.js?v=76';
@@ -333,8 +333,8 @@ async function run() {
         }
       }
       if(z<7.88&&z> -11.90&&Math.abs(x)>23-radius&&Math.abs(x)<23.68)return false;
-      if(Math.abs(z-gardenDoor.z)<1&&Math.abs(x)<1.1){
-        const span=gardenDoor.width/2-.058;
+      const span=gardenDoor.width/2-.058;
+      if(Math.abs(z-gardenDoor.z)<span+radius+.10&&Math.abs(x)<gardenDoor.width/2+radius+.10){
         for(const leaf of gardenDoor.leaves){
           const dx=x-leaf.position.x,dz=z-gardenDoor.z;
           const c=Math.cos(leaf.rotation.y),s=Math.sin(leaf.rotation.y);
@@ -455,7 +455,7 @@ async function run() {
     if(doorAngle!==previousAngle)renderer.shadowMap.needsUpdate=true;
     leftLeaf.rotation.y=-doorAngle;
     rightLeaf.rotation.y=doorAngle;
-    const gardenDistance=Math.hypot(pos.x*1.7,pos.z-gardenDoor.z);
+    const gardenDistance=Math.hypot(Math.max(0,Math.abs(pos.x)-gardenDoor.width/2)*1.7,pos.z-gardenDoor.z);
     if(floor!==0)gardenOccupied=false;
     else if(gardenDistance<2.9)gardenOccupied=true;
     else if(gardenDistance>3.5)gardenOccupied=false;
