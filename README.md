@@ -1,4 +1,8 @@
-# Herrenhaus 2027 · V91
+# Herrenhaus 2027 · V92
+
+## V92 · Automatische Gartentür
+
+Das mittlere Gartenelement öffnet als zweiflügelige, doppelt verglaste Tür automatisch in beide Laufrichtungen.
 
 ## V91 · Wand- und Fensteranschlüsse
 

@@ -143,13 +143,13 @@ export function buildEmptyInterior(THREE, scene) {
     // Südseite: Durchgehende öffentliche Außenfassade mit den bisherigen Fensterachsen.
     const southZ=-11.80, openings=SOUTH_WINDOW_AXES.map(axis=>{
       const {x,y,width,height}=southOpening(axis,level);
-      return [x-width/2,x+width/2,y-height/2,y+height/2];
+      return [x-width/2,x+width/2,y-height/2,y+height/2,level===0&&axis===0];
     });
     let prev=-23.15;
-    for(const [a,b,bottom,top] of openings){
+    for(const [a,b,bottom,top,gardenDoor] of openings){
       if(a>prev)box((prev+a)/2,(lo+hi)/2,southZ,a-prev,ht,.27,plaster,level,true,'Suedwand_Pfeiler');
-      if(bottom>lo)box((a+b)/2,(lo+bottom)/2,southZ,b-a,bottom-lo,.27,plaster,level,true,'Suedwand_Fensterbruestung');
-      if(hi>top)box((a+b)/2,(top+hi)/2,southZ,b-a,hi-top,.27,plaster,level,true,'Suedwand_Fenstersturz');
+      if(bottom>lo)box((a+b)/2,(lo+bottom)/2,southZ,b-a,bottom-lo,.27,plaster,level,!gardenDoor,'Suedwand_Fensterbruestung');
+      if(hi>top)box((a+b)/2,(top+hi)/2,southZ,b-a,hi-top,.27,plaster,level,!gardenDoor,'Suedwand_Fenstersturz');
 
       finishOpening('x',southZ+.135,a,b,bottom,top,1,bottom>lo+.1);
       prev=b;

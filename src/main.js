@@ -8,11 +8,11 @@ import { buildNorthWindowWall } from './north-window-wall.js?v=33';
 import { cladStructuralExterior } from './exterior-skin.js?v=20261118-v11';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { buildFacade } from './facade.js?v=60';
+import { buildFacade } from './facade.js?v=92';
 import { addEntranceLamps } from './entrance-lamps.js?v=81';
 import { buildOakEntrance } from './oak-door.js?v=20261119-v39-deckfalz';
 import { buildSky } from './sky-atmosphere.js?v=20261118-stone-v14';
-import { buildEmptyInterior } from './architecture.js?v=91';
+import { buildEmptyInterior } from './architecture.js?v=92';
 import { loadGardenMaple } from './garden-maple.js?v=62';
 import { buildGrounds } from './landscape.js?v=62';
 import { stairSurface, inStairwell, beginStair, finishedStair } from './stair-navigation.js?v=76';
@@ -284,6 +284,8 @@ async function run() {
       yaw=hallView?gardenStart.yaw:westView?-Math.PI/2:eastView?Math.PI/2:southAngle?2.36:stairView?STAIR_HALL_VIEW.yaw:southView||basementView||salonView||vestibuleView?Math.PI:0,
       pitch=hallView?gardenStart.pitch:stairView?STAIR_HALL_VIEW.pitch:historicWindowPreview?.52:southAngle?.125:southView?.245:westView||eastView?.16:doorView?.02:.07, last=performance.now();
   let doorAngle=0, entranceOccupied=false;
+  let gardenAngle=0, gardenOccupied=false;
+  const gardenDoor=facadeWindows.userData.gardenDoor;
   const [leftLeaf,rightLeaf]=door.userData.leaves;
   const thresholdZ=leftLeaf.position.z;
   let foot=(stateView||stateHallView)?levels[1].floor:(hallView||cinemaView||stairView||entryView||vestibuleView||basementView||ovalView||salonView||doorView)?levels[0].floor:.02;
@@ -331,7 +333,20 @@ async function run() {
         }
       }
       if(z<7.88&&z> -11.90&&Math.abs(x)>23-radius&&Math.abs(x)<23.68)return false;
-      if(z< -11.56&&z> -12.19&&Math.abs(x)<23.60)return false;
+      if(Math.abs(z-gardenDoor.z)<1&&Math.abs(x)<1.1){
+        const span=gardenDoor.width/2-.058;
+        for(const leaf of gardenDoor.leaves){
+          const dx=x-leaf.position.x,dz=z-gardenDoor.z;
+          const c=Math.cos(leaf.rotation.y),s=Math.sin(leaf.rotation.y);
+          const along=(c*dx-s*dz)*-Math.sign(leaf.position.x);
+          const across=s*dx+c*dz;
+          if(along>-radius&&along<span+radius&&Math.abs(across)<.065+radius)return false;
+        }
+      }
+      if(z< -11.56&&z> -12.19&&Math.abs(x)<23.60){
+        const clearHalf=gardenDoor.width/2-.058-radius-.08;
+        if(gardenAngle<1.43||Math.abs(x)>=clearHalf)return false;
+      }
     }else{
       if(Math.abs(x)>23.0-radius||z< -11.56+radius||z>7.95)return false;
     }
@@ -350,6 +365,7 @@ async function run() {
     for(const step of SOUTH_TERRACE){
       if(Math.abs(x)<=step.halfWidth&&z>=step.front&&z<=-11.96)height=step.top;
     }
+    if(Math.abs(x)<gardenDoor.width/2&&z>gardenDoor.z&&z<=-11.57)height=.89;
     for(const step of northSteps){
       if(x>=step.min.x&&x<=step.max.x&&z>=step.min.z&&z<=step.max.z){
         height=Math.max(height,step.max.y);
@@ -439,6 +455,18 @@ async function run() {
     if(doorAngle!==previousAngle)renderer.shadowMap.needsUpdate=true;
     leftLeaf.rotation.y=-doorAngle;
     rightLeaf.rotation.y=doorAngle;
+    const gardenDistance=Math.hypot(pos.x*1.7,pos.z-gardenDoor.z);
+    if(floor!==0)gardenOccupied=false;
+    else if(gardenDistance<2.9)gardenOccupied=true;
+    else if(gardenDistance>3.5)gardenOccupied=false;
+    const gardenGoal=gardenOccupied?1.52:0;
+    const nextGardenAngle=THREE.MathUtils.damp(gardenAngle,gardenGoal,6.5,dt);
+    if(nextGardenAngle!==gardenAngle){
+      gardenAngle=Math.abs(nextGardenAngle-gardenGoal)<.002?gardenGoal:nextGardenAngle;
+      gardenDoor.leaves[0].rotation.y=gardenAngle;
+      gardenDoor.leaves[1].rotation.y=-gardenAngle;
+      renderer.shadowMap.needsUpdate=true;
+    }
     const forward=Number(pressed('w','arrowup'))-Number(pressed('s','arrowdown'));
     const right=Number(pressed('d','arrowright'))-Number(pressed('a','arrowleft'));
     if(forward||right){

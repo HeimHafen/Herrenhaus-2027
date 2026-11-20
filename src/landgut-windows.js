@@ -41,10 +41,57 @@ export function buildLandgutWindows(THREE, exterior, mats, glass, {studyPreview=
       box(name+'_Bronzegriff',side*.074,-.20,-.142,.021,.13,.036,iron);
   }
 
+  function gardenDoor({x,y,width,height}){
+    const z=-11.96, frame=.058, leafWidth=width/2-frame;
+    const door=new THREE.Group();
+    door.name='Automatische_Gartendoppeltuer';
+    door.position.set(x,y,z);
+    group.add(door);
+    openings.push({elevation:'Sued',floor:0,x,y,z,width,height,door:true});
+
+    function piece(parent,name,w,h,d,px,py,pz,material=sash){
+      const mesh=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),material);
+      mesh.name=name;
+      mesh.position.set(px,py,pz);
+      mesh.castShadow=material!==glass;
+      mesh.receiveShadow=true;
+      parent.add(mesh);
+    }
+    const leaves=[];
+    for(const side of [-1,1]){
+      const hinge=side*(width/2-frame);
+      piece(door,'Zarge',frame,height,.18,side*(width-frame)/2,0,.01);
+      const leaf=new THREE.Group();
+      leaf.name=side<0?'Linker_Gartenfluegel':'Rechter_Gartenfluegel';
+      leaf.position.set(hinge,0,0);
+      door.add(leaf);
+      leaves.push(leaf);
+      const center=-side*(leafWidth-.005)/2;
+      const h=height-.08;
+      for(const edge of [-1,1]){
+        piece(leaf,'Fluegelrahmen',.045,h,.075,center+edge*(leafWidth-.05)/2,0,0);
+        piece(leaf,'Fluegelquerholz',leafWidth,.052,.075,center,edge*(h-.052)/2,0);
+      }
+      for(const paneZ of [-.016,.016]){
+        piece(leaf,'Isolierglasscheibe',leafWidth-.08,h-.08,.006,center,0,paneZ,glass);
+      }
+      piece(leaf,'Mittelsprosse',.026,h-.10,.05,center,0,0);
+      for(let row=1;row<6;row++){
+        piece(leaf,'Quersprosse',leafWidth-.075,.026,.05,center,h*(row/6-.5),0);
+      }
+      for(const face of [-1,1]){
+        piece(leaf,'Bronzegriff',.023,.135,.029,-side*(leafWidth-.06),-.20,face*.055,iron);
+      }
+    }
+    piece(door,'Zargensturz',width,.058,.18,0,(height-.058)/2,.01);
+    group.userData.gardenDoor={leaves,z,width};
+  }
+
   for(const {floor,y} of WINDOW_STOREYS){
     for(const axis of SOUTH_WINDOW_AXES){
       const south=southOpening(axis,floor);
-      window('Sued',floor,south.x,south.y,-11.96,south.width,south.height,0,south.door);
+      if(floor===0&&axis===0)gardenDoor(south);
+      else window('Sued',floor,south.x,south.y,-11.96,south.width,south.height,0,south.door);
     }
     for(const x of northAxesForFloor(floor)){
       if(studyPreview&&floor===1&&x===-15)continue;
