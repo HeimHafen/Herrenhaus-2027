@@ -1,6 +1,6 @@
 import {addStairNiche} from "./stair-niche.js?v=89";
 import { WEST_CORE } from './stair-layout.js?v=76';
-import { addStonePanelling, buildGardenHall } from './garden-hall.js?v=87';
+import { addOakPanelling, lightOakFinish, buildGardenHall } from './garden-hall.js?v=93';
 import { WEST_STAIR } from './stair-navigation.js?v=76';
 import { buildManorPlan } from './manor-plan.js?v=84';
 import { portalLintelY } from './north-portal.js?v=29';
@@ -8,7 +8,7 @@ import { WINDOW_STOREYS, SIDE_WINDOW_AXES, SOUTH_WINDOW_AXES, SIDE_OPENING_WIDTH
 export function buildEmptyInterior(THREE, scene) {
   const plaster = new THREE.MeshStandardMaterial({color:0xeae9e5,roughness:.97});
   const floorStone = new THREE.MeshStandardMaterial({color:0xd0cfcb,roughness:.96});
-  const ceilingTrim = plaster; // blank plaster underside, never a marble or patterned surface
+  const ceilingTrim = new THREE.MeshStandardMaterial({color:0xece4d7,roughness:.96});
   const jamb = new THREE.MeshStandardMaterial({color:0xf7f2e9,roughness:.70});
   const structure = new THREE.Group();
   structure.name='Begehbare_Leere_Innenraeume'; scene.add(structure);
@@ -25,8 +25,8 @@ export function buildEmptyInterior(THREE, scene) {
     obj.name=name;obj.position.set(cx,cy,cz);obj.castShadow=h>.22&&!mat.transparent;
     obj.receiveShadow=true;structure.add(obj);
     if(blocking&&level>=0)walls[level].push({x:cx,z:cz,hw:w/2,hd:d/2});
-    if(name==='Gartengeschoss_Boden')gardenSlabs.push(obj);
-    if(level===0&&name==='Trennwand')hallWalls.push(obj);
+    if(name==='Gartengeschoss_Boden'||name==='Fensterzimmer_Boden')gardenSlabs.push(obj);
+    if(level===0&&(name==='Trennwand'||name==='Fensterzimmer_Ruecklauf'))hallWalls.push(obj);
     return obj;
   }
   function beam(from,to,r,material,name){
@@ -219,8 +219,9 @@ export function buildEmptyInterior(THREE, scene) {
     }
     for(const {left,right,x} of ENTRY_WINDOW_BAYS){
       const front=ENTRY_WINDOW_INNER_FACE, back=7.875;
-      const width=right-left, depth=front-back, center=(left+right)/2;
-      box(center,low+.018,(front+back)/2,width,.05,depth,floorStone,-1,false,'Fensterzimmer_Boden');
+      const a=x<0?left:1.935,b=x<0?-1.935:right;
+      const width=b-a, depth=front-back, center=(a+b)/2;
+      box(center,low+.018,(front+7.89)/2,width,.05,front-7.89,floorStone,-1,false,'Fensterzimmer_Boden');
       box(center,ceilingY,(front+back)/2,width,.055,depth,ceilingTrim,-1,false,'Fensterzimmer_Decke');
       for(const edge of [left,right]){
         // Keep the entire inner return on the room side of its boundary.
@@ -230,6 +231,11 @@ export function buildEmptyInterior(THREE, scene) {
         box(wallX,(low+high)/2,(front+back)/2,.17,lowerH,depth,plaster,lev,true,'Fensterzimmer_Ruecklauf');
       }
       const w=NORTH_OPENING_WIDTH, yc=(northBottom+northTop)/2;
+      addOakPanelling(THREE,structure,low+.046,[
+        {x:center,z:front,length:width,alongX:true,side:-1},
+        {x:(x<0?a+.085:a),z:(front+7.89)/2,length:front-7.89,alongX:false,side:1},
+        {x:(x<0?b:b-.085),z:(front+7.89)/2,length:front-7.89,alongX:false,side:-1}
+      ],true);
       box(x,northBottom-.028,front+.12,w+.16,.056,.48,jamb,-1,false,'Fensterzimmer_Fensterbank');
       for(const sign of [-1,1]){
         box(x+sign*(w/2+.035),yc,front-.023,.07,northHeight+.12,.046,jamb,-1,false,'Fensterzimmer_Fensterfutter');
@@ -364,7 +370,7 @@ export function buildEmptyInterior(THREE, scene) {
   finishBox(railStone,wallLeft+capWidth/2,shoulder+.023,wallZ,
     capWidth,.046,.19,-1,false,'Westtreppe_Steinabdeckung');
   const recessWallStart=1.09+.085;
-  addStonePanelling(THREE,structure,garden.floor+.046,[
+  addOakPanelling(THREE,structure,garden.floor+.046,[
     {x:wallX,z:wallFront,length:wallWidth,alongX:true,side:-1},
     {x:WEST_CORE.right-.085,z:(recessWallStart+wallFront)/2,
       length:wallFront-recessWallStart,alongX:false,side:-1}
@@ -453,7 +459,7 @@ export function buildEmptyInterior(THREE, scene) {
         finishBox(railStone,x,y+2.52,.86,.38,.13,.34,-1,false,'Westtreppe_Kapitell');
       }
       finishBox(dressed,well.center,y+2.675,.88,5.36,.18,.24,-1,false,'Westtreppe_Architrav');
-      finishBox(railStone,well.center,y+2.79,.88,5.40,.063,.30,-1,false,'Westtreppe_Gesims');
+      finishBox(railStone,well.center,y+2.79,.88,5.40,.063,.24,-1,false,'Westtreppe_Gesims');
       if(lev!==levels[1]){
         const panelWidth=2.08,panelHeight=Math.min(2.36,top-y-1.34);
         const panelY=y+1.0+panelHeight/2;
@@ -647,7 +653,7 @@ export function buildEmptyInterior(THREE, scene) {
             section.closePath();
             const soffit=new THREE.Mesh(new THREE.ExtrudeGeometry(section,{
               depth:xRight-xLeft,bevelEnabled:false
-            }),warmPlaster);
+            }),ceilingTrim);
             soffit.name='Westtreppe_Gegenlauf_Durchgehende_Untersicht';
             soffit.rotation.y=Math.PI/2;
             soffit.position.x=xLeft;
@@ -655,8 +661,8 @@ export function buildEmptyInterior(THREE, scene) {
             structure.add(soffit);
             // The stepped cornice closes the opening along the head of the
             // return flight, continuous to the wall on the corridor side.
-            for(const [drop,depth,height] of [[0,.31,.25],[.137,.36,.038],[.164,.30,.027]]){
-              finishBox(railStone,(xLeft+xRight)/2,soffitY(startZ)-.125-drop,startZ-.105,
+            for(const [drop,depth,height] of [[0,.24,.20],[.107,.26,.028]]){
+              finishBox(railStone,(xLeft+xRight)/2,soffitY(startZ)-.10-drop,startZ-.105,
                 xRight-xLeft,height,depth,-1,false,'Westtreppe_Gegenlauf_Deckenrahmen');
             }
             const railX=xLeft-.006;
@@ -756,8 +762,9 @@ export function buildEmptyInterior(THREE, scene) {
               depth,height,end-startA,-1,false,'Westtreppe_Durchgehender_Sockel');
           }
           const topAt=z=>Math.min(floor+.93,lo+(z-startA)*slope-.15);
-          const panelMaterial=new THREE.MeshStandardMaterial({color:0xd2c5b0,roughness:.83});
-          const trimMaterial=new THREE.MeshStandardMaterial({color:0xe1d4bf,roughness:.76});
+          const panelMaterial=lightOakFinish(THREE);
+          const trimMaterial=panelMaterial.clone();
+          trimMaterial.color.setHex(0xe8d3b3);
           const rail=(a,b,material,r)=>{
             beam(new THREE.Vector3(faceX+.019,a[1],a[0]),new THREE.Vector3(faceX+.019,b[1],b[0]),r,material,'Westtreppe_Kassettenprofil');
           };

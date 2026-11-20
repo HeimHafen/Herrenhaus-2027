@@ -1,4 +1,8 @@
-# Herrenhaus 2027 · V92
+# Herrenhaus 2027 · V93
+
+## V93 · Helle Eiche und Raumanschlüsse
+
+Die Vertäfelung im Gartengeschoss ist in heller Eiche ausgeführt. Die Fensternischen haben durchgehendes Parkett, die Nebentreppe den Steinboden der Halle.
 
 ## V92 · Automatische Gartentür
 

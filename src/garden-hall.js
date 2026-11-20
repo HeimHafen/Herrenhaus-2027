@@ -36,12 +36,19 @@ export function addLimestoneFloor(THREE,group,material,x,y,z,width,depth) {
   return surface;
 }
 
-export function addStonePanelling(THREE,group,base,spans,painted=false) {
-  const grain=texture(THREE,'entry-finish/kalkputz-relief.jpg');
-  const panel=new THREE.MeshStandardMaterial({
-    color:painted?0xd2c5b0:0xbca991, roughness:.83, bumpMap:grain,bumpScale:.0007
+export function lightOakFinish(THREE) {
+  return new THREE.MeshStandardMaterial({
+    color:0xffedcf,roughness:.66,
+    map:texture(THREE,'wood/eiche-hell-v30.jpg',true),
+    bumpMap:texture(THREE,'wood/eiche-hell-relief-v30.jpg'),
+    bumpScale:.00045
   });
-  const profile=new THREE.MeshStandardMaterial({color:painted?0xe1d4bf:0xd1bda4,roughness:.76});
+}
+
+export function addOakPanelling(THREE,group,base,spans,painted=false) {
+  const panel=lightOakFinish(THREE);
+  const profile=panel.clone();
+  profile.color.setHex(0xe8d3b3);
   const tile=new THREE.BoxGeometry(1,1,1);
   const parts=new Map([[panel,[]],[profile,[]]]);
   for(const {x,z,length,alongX,side} of spans){
@@ -71,7 +78,7 @@ export function addStonePanelling(THREE,group,base,spans,painted=false) {
   }
   for(const [material,matrices] of parts){
     const mesh=new THREE.InstancedMesh(tile,material,matrices.length);
-    mesh.name='Steinbeige_Wandkassetten';
+    mesh.name='Helle_Eiche_Wandkassetten';
     mesh.receiveShadow=true;
     matrices.forEach((matrix,index)=>mesh.setMatrixAt(index,matrix));
     group.add(mesh);
@@ -98,7 +105,7 @@ export function addManorWallFinish(THREE,group,base,spans) {
     face.receiveShadow=true;
     group.add(face);
   }
-  addStonePanelling(THREE,group,base,spans,true);
+  addOakPanelling(THREE,group,base,spans,true);
 }
 
 export function buildGardenHall(THREE,group,level,walls,plaster,slabs,rooms,stairRecessEnd) {
@@ -114,7 +121,7 @@ export function buildGardenHall(THREE,group,level,walls,plaster,slabs,rooms,stai
   });
   const westStair=rooms.find(room=>room.name==='Haupttreppe');
   const stone=rooms.flatMap(room=>{
-    if(room.name==='Halle')return [room];
+    if(room.name==='Halle'||room.name==='Nebentreppe')return [room];
     if(room.name!=='Windfang')return [];
     return [
       {...room,x1:westStair.x1,z2:stairRecessEnd},
@@ -130,16 +137,20 @@ export function buildGardenHall(THREE,group,level,walls,plaster,slabs,rooms,stai
   const stoneRegions=[];
   for(let i=1;i<breaks.length;i++){
     const z1=breaks[i-1],z2=breaks[i];
-    const band=stone.find(room=>room.z1<=(z1+z2)/2&&room.z2>=(z1+z2)/2);
+    const bands=stone.filter(room=>room.z1<=(z1+z2)/2&&room.z2>=(z1+z2)/2).sort((a,b)=>a.x1-b.x1);
     const plank=(a,b)=>addOakParquet(THREE,group,{
       geometry:{parameters:{width:b-a,depth:z2-z1}},position:{x:(a+b)/2,z:(z1+z2)/2}
     },floor,oak);
-    if(band){
-      stoneRegions.push({...band,z1,z2});
-      plank(x-width/2,band.x1);
-      plank(band.x2,x+width/2);
-    }else plank(x-width/2,x+width/2);
+    let edge=x-width/2;
+    for(const band of bands){
+      if(band.x1>edge)plank(edge,band.x1);
+      const start=Math.max(band.x1,edge);
+      if(band.x2>start)stoneRegions.push({...band,x1:start,z1,z2});
+      edge=Math.max(edge,band.x2);
+    }
+    if(edge<x+width/2)plank(edge,x+width/2);
   }
+  for(const bay of slabs.slice(1))addOakParquet(THREE,group,bay,floor,oak);
   buildEntranceFloor(THREE,group,floor,stoneRegions,{x1:-1.56,x2:1.56,z1:north,z2:12.34});
   for(const x of [-15,-6,0,7,16]){
     const bounce=new THREE.PointLight(0xfff2e4,7.5,8,2);
@@ -186,5 +197,5 @@ export function buildGardenHall(THREE,group,level,walls,plaster,slabs,rooms,stai
     }
   }
   addManorWallFinish(THREE,group,floor,manorSpans);
-  addStonePanelling(THREE,group,floor,spans);
+  addOakPanelling(THREE,group,floor,spans);
 }

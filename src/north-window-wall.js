@@ -24,6 +24,25 @@ export function buildNorthWindowWall(THREE, target, material) {
     }
     masonry(edge,x2,y1,y2,8);
   }
+  const reveal=new THREE.MeshStandardMaterial({
+    color:0xe6dac7,roughness:.92,emissive:0x544939,emissiveIntensity:.18
+  });
+  function lineWindow(x,bottom,top,start){
+    const end=11.91, depth=end-start;
+    const width=NORTH_OPENING_WIDTH;
+    function lining(name,w,h,px,py){
+      const mesh=new THREE.Mesh(new THREE.BoxGeometry(w,h,depth),reveal);
+      mesh.name=name;
+      mesh.position.set(px,py,(start+end)/2);
+      mesh.receiveShadow=true;
+      target.add(mesh);
+    }
+    for(const side of [-1,1]){
+      lining('Nordfenster_Helle_Laibung',.027,top-bottom,x+side*(width/2+.005),(bottom+top)/2);
+    }
+    lining('Nordfenster_Heller_Sturz',width,.027,x,top+.005);
+    lining('Nordfenster_Helle_Sohlbank',width,.036,x,bottom-.008);
+  }
   for(const {floor,y} of WINDOW_STOREYS) {
     const low=[0,5.16,10.33][floor],high=[5.16,10.33,14][floor];
     const h=openingHeight(floor,'north');
@@ -36,6 +55,10 @@ export function buildNorthWindowWall(THREE, target, material) {
       piece(edge,x-r,low,high,floor);
       piece(x-r,x+r,low,bottom,floor);
       piece(x-r,x+r,top,high,floor);
+      if(floor!==0||x!==0){
+        const bay=floor===0&&ENTRY_WINDOW_BAYS.find(entry=>entry.x===x);
+        lineWindow(x,bottom,top,bay?ENTRY_WINDOW_INNER_FACE:8);
+      }
       edge=x+r;
     }
     piece(edge,23.5,low,high,floor);

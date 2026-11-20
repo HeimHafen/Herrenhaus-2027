@@ -1,5 +1,5 @@
 import { buildOakEntrance } from './oak-door.js?v=20261119-v39-deckfalz';
-import { addStonePanelling } from './garden-hall.js?v=82';
+import { addOakPanelling } from './garden-hall.js?v=82';
 
 // Local Z follows the hall towards the inner oak door; the exterior portal
 // remains farther north, reached by turning out of this passage.
@@ -55,7 +55,7 @@ export function buildStairCorridor(THREE,structure,level,walls,plaster,stone,tri
     box('Eichenflur_Nebentuer_Gewaende',trim,sideReturn-.091,sideHead/2,edge,.042,sideHead,.11);
   }
   box('Eichenflur_Nebentuer_Kopfprofil',trim,sideReturn-.091,sideHead,-.92,.042,.09,1.11);
-  addStonePanelling(THREE,group,0,spans);
+  addOakPanelling(THREE,group,0,spans);
   box('Eichenflur_Vordere_Kronleiste',trim,sideReturn-.11,3.99,-1.30,.105,.084,2.08);
   box('Eichenflur_Decke',plaster,0,ceiling+.07,ceilingCenter,2*half+.36,.14,ceilingDepth);
   box('Eichenflur_Sturz',plaster,0,2.66,-.21,2.49,.13,.21);
