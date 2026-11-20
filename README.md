@@ -1,4 +1,8 @@
-# Herrenhaus 2027 · V90
+# Herrenhaus 2027 · V91
+
+## V91 · Wand- und Fensteranschlüsse
+
+Geschlossene Außenecken und auf die Fensteröffnungen abgestimmte Innenlaibungen. Das Podestfenster fluchtet mit der Fassade und das Treppenfenster im Hauptgeschoss ist freigelegt.
 
 ## V90 · Licht und Wandanschlüsse in der Treppennische
 

@@ -107,6 +107,20 @@ export function buildEmptyInterior(THREE, scene) {
   const [gardenRooms,stateFloorRooms,secondFloorRooms]=buildManorPlan(THREE,{
     levels,box,horizontal,vertical,structure
   });
+  function finishOpening(axis,face,a,b,sill,head,inward,hasSill=true){
+    const upright=.045, depth=.115;
+    const finish=(u,y,w,h,projection,name)=>{
+      const normal=face+inward*(projection/2-.012);
+      if(axis==='x')box(u,y,normal,w,h,projection,jamb,-1,false,name);
+      else box(normal,y,u,projection,h,w,jamb,-1,false,name);
+    };
+    for(const edge of [a-upright/2,b+upright/2]){
+      finish(edge,(sill+head)/2,upright,head-sill,depth,'Fenster_Innenlaibung');
+    }
+    finish((a+b)/2,head+upright/2,b-a+2*upright,upright,depth,'Fenster_Innensturz');
+    if(hasSill)finish((a+b)/2,sill-.028,b-a+.14,.056,.19,'Fenster_Inneres_Sohlbrett');
+  }
+
   // Align the envelope with the facade openings on every level.
   for(let level=0;level<3;level++){
     const L=levels[level],lo=L.floor,hi=L.top,ht=hi-lo;
@@ -120,24 +134,27 @@ export function buildEmptyInterior(THREE, scene) {
         if(bottom>lo)box(x,(lo+bottom)/2,(a+b)/2,.27,bottom-lo,b-a,plaster,level,true,'Aussenwand_Fensterbruestung');
         if(hi>top)box(x,(top+hi)/2,(a+b)/2,.27,hi-top,b-a,plaster,level,true,'Aussenwand_Fenstersturz');
 
+        finishOpening('z',x-side*.135,a,b,bottom,top,-side);
         prev=b;
       }
-      if(prev<7.85)box(x,(lo+hi)/2,(prev+7.85)/2,.27,ht,7.85-prev,plaster,level,true,'Aussenwand_Pfeiler');
+      const corner=8.035;
+      if(prev<corner)box(x,(lo+hi)/2,(prev+corner)/2,.27,ht,corner-prev,plaster,level,true,'Aussenwand_Pfeiler');
     }
     // Südseite: Durchgehende öffentliche Außenfassade mit den bisherigen Fensterachsen.
     const southZ=-11.80, openings=SOUTH_WINDOW_AXES.map(axis=>{
       const {x,y,width,height}=southOpening(axis,level);
       return [x-width/2,x+width/2,y-height/2,y+height/2];
     });
-    let prev=-23.12;
+    let prev=-23.15;
     for(const [a,b,bottom,top] of openings){
       if(a>prev)box((prev+a)/2,(lo+hi)/2,southZ,a-prev,ht,.27,plaster,level,true,'Suedwand_Pfeiler');
       if(bottom>lo)box((a+b)/2,(lo+bottom)/2,southZ,b-a,bottom-lo,.27,plaster,level,true,'Suedwand_Fensterbruestung');
       if(hi>top)box((a+b)/2,(top+hi)/2,southZ,b-a,hi-top,.27,plaster,level,true,'Suedwand_Fenstersturz');
 
+      finishOpening('x',southZ+.135,a,b,bottom,top,1,bottom>lo+.1);
       prev=b;
     }
-    if(prev<23.12)box((prev+23.12)/2,(lo+hi)/2,southZ,23.12-prev,ht,.27,plaster,level,true,'Suedwand_Pfeiler');
+    if(prev<23.15)box((prev+23.15)/2,(lo+hi)/2,southZ,23.15-prev,ht,.27,plaster,level,true,'Suedwand_Pfeiler');
     if(level>0){
       const z=7.95, height=openingHeight(level,'north');
       const sill=wy-height/2, head=wy+height/2;
@@ -147,6 +164,7 @@ export function buildEmptyInterior(THREE, scene) {
         box((edge+left)/2,(lo+hi)/2,z,left-edge,ht,.17,plaster,level,true,'Nordwand_Pfeiler');
         box(x,(lo+sill)/2,z,NORTH_OPENING_WIDTH,sill-lo,.17,plaster,level,true,'Nordwand_Bruestung');
         box(x,(head+hi)/2,z,NORTH_OPENING_WIDTH,hi-head,.17,plaster,level,false,'Nordwand_Sturz');
+        finishOpening('x',z-.085,left,right,sill,head,-1);
         edge=right;
       }
       box((edge+23.15)/2,(lo+hi)/2,z,23.15-edge,ht,.17,plaster,level,true,'Nordwand_Pfeiler');
@@ -172,8 +190,8 @@ export function buildEmptyInterior(THREE, scene) {
     const northBottom=WINDOW_STOREYS[0].y-northHeight/2;
     const northTop=northBottom+northHeight;
     for(const side of [-1,1]){
-      const left=side<0?-23.13:entryGapHalf;
-      const right=side<0?-entryGapHalf:23.13;
+      const left=side<0?-23.15:entryGapHalf;
+      const right=side<0?-entryGapHalf:23.15;
       let edge=left;
       const bay=ENTRY_WINDOW_BAYS.find(b=>Math.sign(b.x)===side);
       const openings=northAxesForFloor(0).filter(x=>Math.sign(x)===side&&x!==bay.x)
@@ -184,6 +202,7 @@ export function buildEmptyInterior(THREE, scene) {
         if(x!==undefined){
           box(x,(low+northBottom)/2,northZ,end-start,northBottom-low,.17,plaster,lev,true,'Nordwand_Bruestung');
           box(x,(northTop+high)/2,northZ,end-start,high-northTop,.17,plaster,lev,false,'Nordwand_Sturz');
+          finishOpening('x',northZ-.085,start,end,northBottom,northTop,-1);
         }
         edge=end;
       }
@@ -374,7 +393,10 @@ export function buildEmptyInterior(THREE, scene) {
     const top=levels[levels.indexOf(lev)+1]?.floor??lev.top;
     if(lev===levels[0]){
       // Connect the moved core to the original west facade window bay.
-      const sill=y+2.23, head=y+3.62, windowX=-4.46, opening=.69;
+      const facadeWindow=ENTRY_WINDOW_BAYS.find(b=>b.x<0);
+      const sill=y+2.23;
+      const head=WINDOW_STOREYS[0].y+openingHeight(0,'north')/2;
+      const windowX=facadeWindow.x, opening=.69;
       const glazing=new THREE.MeshPhysicalMaterial({color:0xe2edf2,roughness:.17,
         transparent:true,opacity:.29,depthWrite:false,side:THREE.DoubleSide});
       const sash=new THREE.MeshStandardMaterial({color:0x78634c,roughness:.56});
@@ -396,7 +418,19 @@ export function buildEmptyInterior(THREE, scene) {
       finishBox(sash,windowX,(head+sill)/2,sashZ,.034,windowHeight,.054,-1,false,'Westtreppe_Fenstermittelpfosten');
       finishBox(railStone,windowX,sill-.017,back-.119,opening+.16,.071,.27,-1,false,'Westtreppe_Fensterbank');
     }else{
-      finishBox(warmPlaster,well.center,(y+top)/2,back,5.26,top-y,.16,-1,false,'Westtreppe_Rueckwand');
+      if(lev===levels[1]){
+        const x=-5,h=openingHeight(1,'north'),cy=WINDOW_STOREYS[1].y;
+        const sill=cy-h/2,head=cy+h/2;
+        const a=x-NORTH_OPENING_WIDTH/2,b=x+NORTH_OPENING_WIDTH/2;
+        for(const [l,r] of [[well.center-2.63,a],[b,well.center+2.63]]){
+          finishBox(warmPlaster,(l+r)/2,(y+top)/2,back,r-l,top-y,.16,-1,false,'Westtreppe_Rueckwand');
+        }
+        finishBox(warmPlaster,x,(y+sill)/2,back,b-a,sill-y,.16,-1,false,'Westtreppe_Fensterbruestung');
+        finishBox(warmPlaster,x,(head+top)/2,back,b-a,top-head,.16,-1,false,'Westtreppe_Fenstersturz');
+        finishOpening('x',back-.08,a,b,sill,head,-1);
+      }else{
+        finishBox(warmPlaster,well.center,(y+top)/2,back,5.26,top-y,.16,-1,false,'Westtreppe_Rueckwand');
+      }
       finishBox(dressed,well.center,y+.45,back-.105,5.24,.9,.08,-1,false,'Westtreppe_Steinsockel');
       finishBox(railStone,well.center,y+.925,back-.139,5.25,.07,.13,-1,false,'Westtreppe_Sockelgesims');
       finishBox(railStone,well.center,top-.13,back-.133,5.25,.13,.12,-1,false,'Westtreppe_Rueckwandgesims');
@@ -420,13 +454,15 @@ export function buildEmptyInterior(THREE, scene) {
       }
       finishBox(dressed,well.center,y+2.675,.88,5.36,.18,.24,-1,false,'Westtreppe_Architrav');
       finishBox(railStone,well.center,y+2.79,.88,5.40,.063,.30,-1,false,'Westtreppe_Gesims');
-      const panelWidth=2.08,panelHeight=Math.min(2.36,top-y-1.34);
-      const panelY=y+1.0+panelHeight/2;
-      for(const x of [well.center-panelWidth/2,well.center+panelWidth/2]){
-        finishBox(dressed,x,panelY,back-.102,.056,panelHeight,.049,-1,false,'Westtreppe_Wandfeldrahmen');
-      }
-      for(const edge of [-1,1]){
-        finishBox(dressed,well.center,panelY+edge*panelHeight/2,back-.102,panelWidth,.056,.049,-1,false,'Westtreppe_Wandfeldrahmen');
+      if(lev!==levels[1]){
+        const panelWidth=2.08,panelHeight=Math.min(2.36,top-y-1.34);
+        const panelY=y+1.0+panelHeight/2;
+        for(const x of [well.center-panelWidth/2,well.center+panelWidth/2]){
+          finishBox(dressed,x,panelY,back-.102,.056,panelHeight,.049,-1,false,'Westtreppe_Wandfeldrahmen');
+        }
+        for(const edge of [-1,1]){
+          finishBox(dressed,well.center,panelY+edge*panelHeight/2,back-.102,panelWidth,.056,.049,-1,false,'Westtreppe_Wandfeldrahmen');
+        }
       }
     }
     if(lev!==levels[0]){
