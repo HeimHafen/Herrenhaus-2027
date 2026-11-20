@@ -12,6 +12,7 @@ function laneStart(stair,side){
 }
 
 function inLane(stair,x,z,side){
+  if(stair.mirror)x=2*stair.center-x;
   const nearPost=Math.abs(z-laneStart(stair,side))<guardClearance||
     Math.abs(z-stair.turn)<guardClearance;
   const inset=WEST_STAIR.playerRadius+(nearPost?WEST_STAIR.postHalf:WEST_STAIR.railHalf);
@@ -35,14 +36,8 @@ export function stairSurface(stair,x,z){
 }
 
 export function inStairwell(wells,x,z,floor){
-  return wells.some(w=>{
-    if(floor===0&&w.startA!==undefined){
-      const innerRail=w.laneA+w.widthA-w.width/2-(w.edgeInsetA??0);
-      if(x>=innerRail+WEST_STAIR.playerRadius&&z<w.turn)return false;
-      return Math.abs(x-w.center)<2.71 && z>w.startA-.05 && z<7.88;
-    }
-    return Math.abs(x-w.center)<2.71 && z>w.start-.05 && z<7.88;
-  });
+  return wells.some(w=>Math.abs(x-w.center)<2.70&&
+    z>(floor===0?w.groundStart:w.start)-.05&&z<w.far);
 }
 
 export function beginStair(stairs,currentFloor,x,z){

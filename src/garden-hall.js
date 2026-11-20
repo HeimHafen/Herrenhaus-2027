@@ -1,6 +1,6 @@
 import { buildEntranceFloor } from './entrance-floor.js?v=85';
 import { addOakParquet } from './parquet.js?v=83';
-import { HALL_NORTH, northOpenings } from './manor-plan.js?v=95';
+import { HALL_NORTH, northOpenings } from './manor-plan.js?v=96';
 
 function texture(THREE, file, color=false) {
   const map=new THREE.TextureLoader().load('./assets/'+file);
@@ -108,7 +108,7 @@ export function addManorWallFinish(THREE,group,base,spans) {
   addOakPanelling(THREE,group,base,spans,true);
 }
 
-export function buildGardenHall(THREE,group,level,walls,plaster,slabs,rooms,stairRecessEnd) {
+export function buildGardenHall(THREE,group,level,walls,plaster,slabs,rooms) {
   plaster.bumpMap=texture(THREE,'entry-finish/kalkputz-relief.jpg');
   plaster.bumpScale=.00065;
   plaster.color.setHex(0xe5d6c2);
@@ -119,15 +119,7 @@ export function buildGardenHall(THREE,group,level,walls,plaster,slabs,rooms,stai
     bumpMap:texture(THREE,'wood/oak-2027-bump.jpg'),
     bumpScale:.0008,vertexColors:true,roughness:.55,clearcoat:.14,clearcoatRoughness:.49
   });
-  const westStair=rooms.find(room=>room.name==='Haupttreppe');
-  const stone=rooms.flatMap(room=>{
-    if(room.name==='Halle'||room.name==='Nebentreppe')return [room];
-    if(room.name!=='Windfang')return [];
-    return [
-      {...room,x1:westStair.x1,z2:stairRecessEnd},
-      {...room,z1:stairRecessEnd}
-    ];
-  });
+  const stone=rooms.filter(room=>['Halle','Windfang','Westtreppe','Osttreppe'].includes(room.name));
   const [slab]=slabs;
   const {width,depth}=slab.geometry.parameters;
   const {x,z}=slab.position;
@@ -172,7 +164,7 @@ export function buildGardenHall(THREE,group,level,walls,plaster,slabs,rooms,stai
     for(const side of [-1,1])trim(x+side*(width/2+.048),(floor+top)/2,.094,top-floor);
     trim(x,top+.048,width+.19,.096);
   }
-  const fittedRooms=new Set(['Privatkino','Haupttreppe','Nebentreppe']);
+  const fittedRooms=new Set(['Privatkino','Westtreppe','Osttreppe']);
   for(const {geometry,position:{x,z}} of walls){
     const {width,depth}=geometry.parameters;
     const alongX=depth===.17;
